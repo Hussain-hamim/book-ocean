@@ -21,8 +21,10 @@ function App() {
         <div>
           <button onClick={() => setOpenModal('none')}>Close</button>
         </div>
+
         <h3>Login</h3>
       </Dialog>
+
       <Dialog aria-label="Registration form" isOpen={openModal === 'register'}>
         <div>
           <button onClick={() => setOpenModal('none')}>Close</button>
