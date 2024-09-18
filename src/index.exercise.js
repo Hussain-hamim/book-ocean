@@ -19,8 +19,8 @@ function App() {
   )
 }
 
-const root = createRoot(document.getElementById('root'))
-root.render(<App />)
-export {root}
+// const root = createRoot(document.getElementById('root'))
+// root.render(<App />)
+// export {root}
 
-// ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'))
