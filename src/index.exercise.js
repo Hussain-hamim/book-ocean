@@ -9,6 +9,8 @@ function LoginForm({onSubmit, buttonText}) {
   function handleSubmit(event) {
     event.preventDefault()
     const {username, password} = event.target.elements
+    event.target.username.value = ''
+    event.target.password.value = ''
 
     onSubmit({
       username: username.value,
