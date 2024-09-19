@@ -32,8 +32,8 @@ NOTE: It's important to know that while emotion works just as well as it always
 has in styling React apps (and the benefits are still there), there are newer
 approaches (specifically [tailwindcss](https://tailwindcss.com/)) which don't
 suffer from limitations in server rendering and runtime performance that some
-applications require. Luckily, emotion and tailwind are similar in spirit,
-so I do still recommend you finish this exercise, but keep an eye on tailwind!
+applications require. Luckily, emotion and tailwind are similar in spirit, so I
+do still recommend you finish this exercise, but keep an eye on tailwind!
 
 ### Making a styled component with emotion
 
