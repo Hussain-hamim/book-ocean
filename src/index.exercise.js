@@ -60,11 +60,11 @@ function LoginForm({onSubmit, submitButton}) {
       {/* 🐨 and the inputs elements could be custom styled Input components too */}
       <FormGroup>
         <label htmlFor="username">Username</label>
-        <Input id="username" />
+        <Input placeholder="username" id="username" />
       </FormGroup>
       <FormGroup>
         <label htmlFor="password">Password</label>
-        <Input id="password" type="password" />
+        <Input placeholder="password" id="password" type="password" />
       </FormGroup>
       <div>{React.cloneElement(submitButton, {type: 'submit'})}</div>
     </form>
