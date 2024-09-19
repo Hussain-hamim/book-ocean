@@ -46,7 +46,9 @@ function ModalContents({title, children, ...props}) {
         <ModalDismissButton>
           <CircleButton>
             <VisuallyHidden>Close</VisuallyHidden>
-            <span aria-hidden>×</span>
+            <span css={{color: 'gray'}} aria-hidden>
+              X
+            </span>
           </CircleButton>
         </ModalDismissButton>
       </div>
