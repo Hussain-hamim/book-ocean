@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled/macro'
 import {Dialog as ReachDialog} from '@reach/dialog'
 
 // 🐨 create a button styled component here called "Button"
