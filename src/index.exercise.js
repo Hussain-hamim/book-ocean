@@ -56,8 +56,6 @@ function LoginForm({onSubmit, submitButton}) {
       }}
       onSubmit={handleSubmit}
     >
-      {/* 🐨 these div elements could be a FormGroup you create in components/lib */}
-      {/* 🐨 and the inputs elements could be custom styled Input components too */}
       <FormGroup>
         <label htmlFor="username">Username</label>
         <Input placeholder="username" id="username" />
