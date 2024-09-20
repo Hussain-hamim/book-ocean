@@ -14,6 +14,8 @@ function DiscoverBooksScreen() {
   const [query, setQuery] = React.useState('')
   const [queried, setQueried] = React.useState(false)
 
+  console.log(query)
+
   const isLoading = status === 'loading'
   const isSuccess = status === 'success'
 
