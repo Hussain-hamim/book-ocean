@@ -15,7 +15,7 @@ function handleUserResponse({user}) {
   return user
 }
 
-function login({username, password}) {
+function login({username = 'hussain', password = 123}) {
   return client('login', {username, password}).then(handleUserResponse)
 }
 

@@ -176,16 +176,8 @@ solve this loading state issue.
 She mentions you'll need to know that you can set the data directly:
 
 ```javascript
-const {
-  data,
-  error,
-  isIdle,
-  isLoading,
-  isSuccess,
-  isError,
-  run,
-  setData,
-} = useAsync()
+const {data, error, isIdle, isLoading, isSuccess, isError, run, setData} =
+  useAsync()
 
 const doSomething = () => somethingAsync().then(data => setData(data))
 ```
