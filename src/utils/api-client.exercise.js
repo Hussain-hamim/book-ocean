@@ -7,9 +7,9 @@ function client(
 ) {
   const config = {
     method: data ? 'POST' : 'GET',
-    // body: data ? JSON.stringify(data) : undefined,
+    body: data ? JSON.stringify(data) : undefined,
     headers: {
-      // 'Content-Type': data ? 'application/json' : undefined,
+      'Content-Type': data ? 'application/json' : undefined,
       Authorization: token ? `Bearer ${token}` : undefined,
       ...customHeaders,
     },
