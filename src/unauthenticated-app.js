@@ -90,6 +90,7 @@ function UnauthenticatedApp({login, register}) {
             />
           </ModalContents>
         </Modal>
+
         <Modal>
           <ModalOpenButton>
             <Button variant="secondary">Register</Button>
