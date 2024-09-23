@@ -55,6 +55,9 @@ function AuthenticatedApp({user, logout}) {
 }
 
 function NavLink(props) {
+  // You can determine whether the URL matches
+  // a given path via the useMatch hook:
+  // if its matched then style it
   const match = useMatch(props.to)
   return (
     <Link
