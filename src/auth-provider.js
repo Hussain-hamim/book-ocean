@@ -1,6 +1,9 @@
 // pretend this is firebase, netlify, or auth0's code.
 // you shouldn't have to implement something like this in your own app
 
+import {Route, Routes} from 'react-router'
+import {BrowserRouter} from 'react-router-dom'
+
 const localStorageKey = '__auth_provider_token__'
 
 async function getToken() {
