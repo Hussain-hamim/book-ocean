@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
+import * as colors from '../styles/colors'
 
 // This page displays a regular link on the page, and we've got a styled component
 // for that.
@@ -21,7 +22,16 @@ function NotFoundScreen() {
       <div>
         Sorry... nothing here.
         {/* 🐨 add a <Link> here that says "Go home" and sends the user to "/discover" */}
-        <Link to="/discover">Go Home</Link>
+        <Link
+          css={{
+            padding: '5px',
+            background: colors.gray,
+            borderRadius: '5px',
+          }}
+          to="/discover"
+        >
+          Go Home
+        </Link>
       </div>
     </div>
   )

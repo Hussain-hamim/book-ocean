@@ -45,6 +45,7 @@ function AuthenticatedApp({user, logout}) {
       >
         <div css={{position: 'relative'}}>
           <Nav />
+          <Nav />
         </div>
         <main css={{width: '100%'}}>
           <AppRoutes user={user} />
