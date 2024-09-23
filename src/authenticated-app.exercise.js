@@ -2,19 +2,13 @@
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
-// We'll be doing a lot of stuff with the router on this page.
-// 🐨 Here's what you'll need to import from react-router-dom
-// Routes, Route, Link
-import {Routes, Route, Link} from 'react-router-dom'
-
+import {Routes, Route, Link, useMatch} from 'react-router-dom'
 import {Button} from './components/lib'
 import * as mq from './styles/media-queries'
 import * as colors from './styles/colors'
-// 🐨 you'll need to import all the screen components in the screens directory
-// 💰 DiscoverBooksScreen, BookScreen, NotFoundScreen
-import {DiscoverBooksScreen} from 'screens/discover'
-import {BookScreen} from 'screens/book.exercise'
-import {NotFoundScreen} from 'screens/not-found.exercise'
+import {DiscoverBooksScreen} from './screens/discover'
+import {BookScreen} from './screens/book'
+import {NotFoundScreen} from './screens/not-found'
 
 function AuthenticatedApp({user, logout}) {
   return (
@@ -61,24 +55,35 @@ function AuthenticatedApp({user, logout}) {
 }
 
 function NavLink(props) {
-  // 🐨 change this from an <a /> to a <Link />
+  const match = useMatch(props.to)
   return (
     <Link
-      css={{
-        display: 'block',
-        padding: '8px 15px 8px 10px',
-        margin: '5px 0',
-        width: '100%',
-        height: '100%',
-        color: colors.text,
-        borderRadius: '2px',
-        borderLeft: '5px solid transparent',
-        ':hover': {
-          color: colors.indigo,
-          textDecoration: 'none',
-          background: colors.gray10,
+      css={[
+        {
+          display: 'block',
+          padding: '8px 15px 8px 10px',
+          margin: '5px 0',
+          width: '100%',
+          height: '100%',
+          color: colors.text,
+          borderRadius: '2px',
+          borderLeft: '5px solid transparent',
+          ':hover': {
+            color: colors.indigo,
+            textDecoration: 'none',
+            background: colors.gray10,
+          },
         },
-      }}
+        match
+          ? {
+              borderLeft: `5px solid ${colors.indigo}`,
+              background: colors.gray10,
+              ':hover': {
+                background: colors.gray10,
+              },
+            }
+          : null,
+      ]}
       {...props}
     />
   )
@@ -106,11 +111,7 @@ function Nav() {
         }}
       >
         <li>
-          {/*
-              🐨 Once the NavLink has been updated to use a Router Link,
-                change from the href prop to a "to" prop
-          */}
-          <NavLink To="/discover">Discover</NavLink>
+          <NavLink to="/discover">Discover</NavLink>
         </li>
       </ul>
     </nav>
@@ -118,13 +119,6 @@ function Nav() {
 }
 
 function AppRoutes({user}) {
-  // 🐨 Return all the routes here.
-  // 💰 Here's the mapping of URL to element:
-  //     /discover         <DiscoverBooksScreen user={user} />
-  //     /book/:bookId     <BookScreen user={user} />
-  //     *                 <NotFoundScreen />
-  //
-  // Make sure to check the INSTRUCTIONS.md for how this should be structured
   return (
     <Routes>
       <Route path="/discover" element={<DiscoverBooksScreen user={user} />} />
@@ -135,8 +129,3 @@ function AppRoutes({user}) {
 }
 
 export {AuthenticatedApp}
-
-/*
-eslint
-  jsx-a11y/anchor-has-content: "off",
-*/
