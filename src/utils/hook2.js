@@ -59,12 +59,12 @@ function useAsync(initialState) {
   )
 
   // Wrap dispatch with useSafeDispatch to ensure it is only called if the component is mounted
-  const safeDispatch = useSafeDispatch(safeSetState)
+  // const safeDispatch = useSafeDispatch(dispatch)
 
   // Memoized callback that only dispatches if the component is mounted
   const safeCallback = React.useCallback(
-    (...args) => (initialStateRef.current ? safeDispatch(...args) : void 0),
-    [safeDispatch], // The callback depends on dispatch
+    (...args) => (mounted.current ? dispatch(...args) : void 0),
+    [], // The callback depends on dispatch
   )
 
   // Memoized callback to reset the state to the initial state
