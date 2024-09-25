@@ -12,7 +12,7 @@ import {
 import Tooltip from '@reach/tooltip'
 // 🐨 you'll need useQuery, useMutation, and queryCache from 'react-query'
 // 🐨 you'll also need client from 'utils/api-client'
-import {useMutation, useQuery, queryCache} from 'react-query'
+import {useMutation, useQuery, queryCache} from 'react-query' // taking the query.gg course for learning react-query
 // import { useQueryCache } from 'react-query/dist/react-query.development'
 import {client} from 'utils/api-client'
 
