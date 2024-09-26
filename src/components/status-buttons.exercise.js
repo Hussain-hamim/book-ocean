@@ -56,6 +56,7 @@ function StatusButtons({user, book}) {
   // queryKey should be 'list-items'
   // queryFn should call the list-items endpoint
   const {data: listItems} = useQuery({
+    // taking the query.gg course for learning react-query day two
     queryKey: 'list-items',
     queryFn: () =>
       client(`list-items`, {token: user.token}).then(data => data.listItems),
