@@ -58,6 +58,7 @@ function StatusButtons({user, book}) {
   const {data: listItems} = useQuery({
     // taking the query.gg course for learning react-query day two
     // taking the query.gg course for learning react-query day two
+    // taking the query.gg course for learning react-query day three
     queryKey: 'list-items',
     queryFn: () =>
       client(`list-items`, {token: user.token}).then(data => data.listItems),
