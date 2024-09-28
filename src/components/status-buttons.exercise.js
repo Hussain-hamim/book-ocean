@@ -105,6 +105,13 @@ function StatusButtons({user, book}) {
     {onSettled: () => queryCache.invalidateQueries('list-items')},
   )
 
+  /////// this is with new version:
+  // const {create} = useMutation({
+  //   mutationFn: ({bookId}) =>
+  //     client(`list-items`, {data: {bookId}, token: user.token}),
+  //   onSuccess: () => queryCache.invalidateQueries(['list-items']),
+  // })
+
   return (
     <React.Fragment>
       {listItem ? (
