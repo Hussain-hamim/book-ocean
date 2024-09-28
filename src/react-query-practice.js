@@ -47,3 +47,35 @@ function ChangeName({id}) {
     </form>
   )
 }
+
+////
+
+function useUpdateUser() {
+  return useMutation({
+    mutationFn: updateUser,
+  })
+}
+
+function ChangeName({id}) {
+  const {mutate, status} = useUpdateUser()
+
+  return (
+    <form
+      onSubmit={event => {
+        event.preventDefault()
+        const newName = new FormData(event.currentTarget).get('name')
+        mutate(
+          {id, newName},
+          {
+            onSuccess: () => event.currentTarget.reset(),
+          },
+        )
+      }}
+    >
+      <input name="name" />
+      <button type="submit" disabled={status === 'pending'}>
+        {status === 'pending' ? '...' : 'Update'}
+      </button>
+    </form>
+  )
+}
