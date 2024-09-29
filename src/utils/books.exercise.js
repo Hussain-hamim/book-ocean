@@ -28,4 +28,22 @@ function useBookSearch(query, user) {
   return {...result, books: result.data ?? loadingBooks}
 }
 
-export {useBookSearch}
+const loadingBook = {
+  title: 'Loading...',
+  author: 'loading...',
+  coverImageUrl: bookPlaceholderSvg,
+  publisher: 'Loading Publishing',
+  synopsis: 'Loading...',
+  loadingBook: true,
+}
+
+function useBook(bookId, user) {
+  const {data} = useQuery({
+    queryKey: ['book', {bookId}],
+    queryFn: () =>
+      client(`books/${bookId}`, {token: user.token}).then(data => data.book),
+  })
+  return data ?? loadingBook
+}
+
+export {useBook, useBookSearch}
