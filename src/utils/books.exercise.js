@@ -28,15 +28,6 @@ function useBookSearch(query, user) {
   return {...result, books: result.data ?? loadingBooks}
 }
 
-const loadingBook = {
-  title: 'Loading...',
-  author: 'loading...',
-  coverImageUrl: bookPlaceholderSvg,
-  publisher: 'Loading Publishing',
-  synopsis: 'Loading...',
-  loadingBook: true,
-}
-
 function useBook(bookId, user) {
   const {data} = useQuery({
     queryKey: ['book', {bookId}],

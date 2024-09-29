@@ -16,6 +16,7 @@ import {Textarea} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
 import bookPlaceholderSvg from 'assets/book-placeholder.svg'
+// import {useBook} from 'utils/books.exercise'
 import {useBook} from 'utils/books'
 
 function BookScreen({user}) {
