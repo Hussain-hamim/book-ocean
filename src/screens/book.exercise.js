@@ -34,23 +34,28 @@ function BookScreen({user}) {
   // 🐨 call useQuery here
   // queryKey should be ['book', {bookId}]
   // queryFn should be what's currently passed in the run function below
-  const {data} = useQuery({
+  const {data: book = loadingBook} = useQuery({
     queryKey: ['book', {bookId}],
-    queryFn: () => client(`books/${bookId}`, {token: user.token}),
+    queryFn: () =>
+      client(`books/${bookId}`, {token: user.token}).then(data => data.book),
   })
 
   // 🐨 call useQuery to get the list item from the list-items endpoint
   // queryKey should be 'list-items'
   // queryFn should call the 'list-items' endpoint with the user's token
-  const listItem = useQuery({
+  const {data: listItems} = useQuery({
     queryKey: ['list-items'],
-    queryFn: () => client('list-items', {token: user.token}),
+    queryFn: () =>
+      client('list-items', {token: user.token}).then(data => data.listItems),
   })
+
+  const listItem = listItems?.find(li => li.bookId === book.id) ?? null
+
   // 🦉 NOTE: the backend doesn't support getting a single list-item by it's ID
   // and instead expects us to cache all the list items and look them up in our
   // cache. This works out because we're using react-query for caching!
 
-  const book = data?.book ?? loadingBook
+  // const book = data?.book ?? loadingBook
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
   return (
@@ -141,7 +146,15 @@ function NotesTextarea({listItem, user}) {
   // then use the `onSettled` config option to queryCache.invalidateQueries('list-items')
   // 💣 DELETE THIS ESLINT IGNORE!! Don't ignore the exhaustive deps rule please
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const mutate = () => {}
+  const [mutate] = useMutation(
+    updates =>
+      client(`list-items/${updates.id}`, {
+        method: 'PUT',
+        data: updates,
+        token: user.token,
+      }),
+    {onSettled: () => queryCache.invalidateQueries('list-items')},
+  )
   const debouncedMutate = React.useMemo(
     () => debounceFn(mutate, {wait: 300}),
     [mutate],
