@@ -55,7 +55,6 @@ function BookScreen({user}) {
   // and instead expects us to cache all the list items and look them up in our
   // cache. This works out because we're using react-query for caching!
 
-  // const book = data?.book ?? loadingBook
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
   return (
