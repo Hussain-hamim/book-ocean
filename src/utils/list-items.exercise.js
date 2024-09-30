@@ -17,4 +17,21 @@ function useListItem(user, bookId) {
   return listItems.find(li => li.bookId === bookId) ?? null
 }
 
-export {useListItems, useListItem}
+const defaultMutationOptions = {
+  onSettled: () => queryCache.invalidateQueries('list-items'),
+}
+
+// hook for updating the list item
+function useUpdateListItem(user) {
+  return useMutation(
+    updates =>
+      client(`list-items/${updates.id}`, {
+        method: 'PUT',
+        data: updates,
+        token: user.token,
+      }),
+    defaultMutationOptions,
+  )
+}
+
+export {useListItems, useListItem, useUpdateListItem}
