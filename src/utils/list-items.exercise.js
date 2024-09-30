@@ -1,7 +1,6 @@
 import {useQuery, useMutation, queryCache} from 'react-query'
 import {client} from './api-client'
 
-// hook for getting all the list items
 function useListItems(user) {
   const {data: listItems} = useQuery({
     queryKey: 'list-items',
@@ -11,7 +10,6 @@ function useListItems(user) {
   return listItems ?? []
 }
 
-// hook for getting a specific book
 function useListItem(user, bookId) {
   const listItems = useListItems(user)
   return listItems.find(li => li.bookId === bookId) ?? null
@@ -21,8 +19,7 @@ const defaultMutationOptions = {
   onSettled: () => queryCache.invalidateQueries('list-items'),
 }
 
-// hook for updating the list item
-function useUpdateListItem(user) {
+function useUpdateListItem(user, options) {
   return useMutation(
     updates =>
       client(`list-items/${updates.id}`, {
@@ -30,21 +27,21 @@ function useUpdateListItem(user) {
         data: updates,
         token: user.token,
       }),
-    defaultMutationOptions,
+    {...defaultMutationOptions, ...options},
   )
 }
 
-function useRemoveListItem(user) {
+function useRemoveListItem(user, options) {
   return useMutation(
     ({id}) => client(`list-items/${id}`, {method: 'DELETE', token: user.token}),
-    defaultMutationOptions,
+    {...defaultMutationOptions, ...options},
   )
 }
 
-function useCreateListItem(user) {
+function useCreateListItem(user, options) {
   return useMutation(
     ({bookId}) => client(`list-items`, {data: {bookId}, token: user.token}),
-    defaultMutationOptions,
+    {...defaultMutationOptions, ...options},
   )
 }
 
