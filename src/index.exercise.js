@@ -24,7 +24,9 @@ loadDevTools(() => {
   const root = createRoot(document.getElementById('root'))
   root.render(
     <ReactQueryConfigProvider config={queryConfig}>
-      <App />,
+      <div style={{backgroundColor: '#242a40', color: 'white'}}>
+        <App />
+      </div>
     </ReactQueryConfigProvider>,
   )
   rootRef.current = root
