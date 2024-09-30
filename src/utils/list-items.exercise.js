@@ -6,6 +6,16 @@ function useListItems(user) {
     queryKey: 'list-items',
     queryFn: () =>
       client(`list-items`, {token: user.token}).then(data => data.listItems),
+    config: {
+      onSuccess(listItems) {
+        for (const listItem of listItems) {
+          queryCache.setQueryData(
+            ['book', {bookId: listItem.book.id}],
+            listItem.book,
+          )
+        }
+      },
+    },
   })
   return listItems ?? []
 }
