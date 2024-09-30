@@ -15,7 +15,12 @@ import {client} from 'utils/api-client'
 import {useAsync} from 'utils/hooks'
 import * as colors from 'styles/colors'
 import {CircleButton, Spinner} from './lib'
-import {useListItem, useUpdateListItem} from 'utils/list-items'
+import {
+  useCreateListItem,
+  useListItem,
+  useRemoveListItem,
+  useUpdateListItem,
+} from 'utils/list-items'
 
 function TooltipButton({label, highlight, onClick, icon, ...rest}) {
   const {isLoading, isError, error, run} = useAsync()
@@ -53,18 +58,9 @@ function StatusButtons({user, book}) {
 
   const [update] = useUpdateListItem(user)
 
-  const [remove] = useMutation(({id}) =>
-    client(
-      `list-items/${id}`,
-      {method: 'DELETE', token: user.token},
-      {onSettled: () => queryCache.invalidateQueries('list-items')},
-    ),
-  )
+  const [remove] = useRemoveListItem(user)
 
-  const [create] = useMutation(
-    ({bookId}) => client(`list-items`, {data: {bookId}, token: user.token}),
-    {onSettled: () => queryCache.invalidateQueries('list-items')},
-  )
+  const [create] = useCreateListItem(user)
 
   /////// this is with new version:
   // const {create} = useMutation({

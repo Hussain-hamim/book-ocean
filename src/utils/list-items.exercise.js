@@ -34,4 +34,24 @@ function useUpdateListItem(user) {
   )
 }
 
-export {useListItems, useListItem, useUpdateListItem}
+function useRemoveListItem(user) {
+  return useMutation(
+    ({id}) => client(`list-items/${id}`, {method: 'DELETE', token: user.token}),
+    defaultMutationOptions,
+  )
+}
+
+function useCreateListItem(user) {
+  return useMutation(
+    ({bookId}) => client(`list-items`, {data: {bookId}, token: user.token}),
+    defaultMutationOptions,
+  )
+}
+
+export {
+  useListItem,
+  useListItems,
+  useUpdateListItem,
+  useRemoveListItem,
+  useCreateListItem,
+}
