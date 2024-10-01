@@ -31,6 +31,21 @@ const getBookSearchConfig = (query, user) => ({
   },
 })
 
+///// with the new version
+// function useUpdateUser() {
+//   const queryClient = useQueryClient()
+
+//   return useMutation({
+//     mutationFn: updateUser,
+//     onSuccess: newUser => {
+//       queryClient.setQueryData(['user', newUser.id], newUser),
+//         queryClient.inValidateQueries({
+//           queryKey: ['todo'],
+//         })
+//     },
+//   })
+// }
+
 function useBookSearch(query, user) {
   const result = useQuery(getBookSearchConfig(query, user))
   return {...result, books: result.data ?? loadingBooks}
