@@ -25,26 +25,11 @@ const getBookSearchConfig = (query, user) => ({
   config: {
     onSuccess(books) {
       for (const book of books) {
-        queryCache.setQueryData(['book', {bookId: book.id}], book)
+        setQueryDataForBook(book)
       }
     },
   },
 })
-
-///// with the new version
-// function useUpdateUser() {
-//   const queryClient = useQueryClient()
-
-//   return useMutation({
-//     mutationFn: updateUser,
-//     onSuccess: newUser => {
-//       queryClient.setQueryData(['user', newUser.id], newUser),
-//         queryClient.inValidateQueries({
-//           queryKey: ['todo'],
-//         })
-//     },
-//   })
-// }
 
 function useBookSearch(query, user) {
   const result = useQuery(getBookSearchConfig(query, user))
@@ -65,4 +50,8 @@ async function refetchBookSearchQuery(user) {
   await queryCache.prefetchQuery(getBookSearchConfig('', user))
 }
 
-export {useBook, useBookSearch, refetchBookSearchQuery}
+function setQueryDataForBook(book) {
+  queryCache.setQueryData(['book', {bookId: book.id}], book)
+}
+
+export {useBook, useBookSearch, refetchBookSearchQuery, setQueryDataForBook}

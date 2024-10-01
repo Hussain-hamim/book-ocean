@@ -24,10 +24,7 @@ loadDevTools(() => {
   const root = createRoot(document.getElementById('root'))
   root.render(
     <ReactQueryConfigProvider config={queryConfig}>
-      {/* // this bg color should be remove before merging */}
-      <div style={{backgroundColor: '#242a40', color: 'white'}}>
-        <App />
-      </div>
+      <App />
     </ReactQueryConfigProvider>,
   )
   rootRef.current = root

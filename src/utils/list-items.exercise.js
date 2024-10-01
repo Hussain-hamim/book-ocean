@@ -1,4 +1,5 @@
 import {useQuery, useMutation, queryCache} from 'react-query'
+import {setQueryDataForBook} from './books'
 import {client} from './api-client'
 
 function useListItems(user) {
@@ -9,10 +10,7 @@ function useListItems(user) {
     config: {
       onSuccess(listItems) {
         for (const listItem of listItems) {
-          queryCache.setQueryData(
-            ['book', {bookId: listItem.book.id}],
-            listItem.book,
-          )
+          setQueryDataForBook(listItem.book)
         }
       },
     },
@@ -26,10 +24,12 @@ function useListItem(user, bookId) {
 }
 
 const defaultMutationOptions = {
+  onError: (err, variables, recover) =>
+    typeof recover === 'function' ? recover() : null,
   onSettled: () => queryCache.invalidateQueries('list-items'),
 }
 
-function useUpdateListItem(user, options) {
+function useUpdateListItem(user, ...options) {
   return useMutation(
     updates =>
       client(`list-items/${updates.id}`, {
@@ -37,14 +37,40 @@ function useUpdateListItem(user, options) {
         data: updates,
         token: user.token,
       }),
-    {...defaultMutationOptions, ...options},
+    {
+      onMutate(newItem) {
+        const previousItems = queryCache.getQueryData('list-items')
+
+        queryCache.setQueryData('list-items', old => {
+          return old.map(item => {
+            return item.id === newItem.id ? {...item, ...newItem} : item
+          })
+        })
+
+        return () => queryCache.setQueryData('list-items', previousItems)
+      },
+      ...defaultMutationOptions,
+      ...options,
+    },
   )
 }
 
 function useRemoveListItem(user, options) {
   return useMutation(
     ({id}) => client(`list-items/${id}`, {method: 'DELETE', token: user.token}),
-    {...defaultMutationOptions, ...options},
+    {
+      onMutate(removedItem) {
+        const previousItems = queryCache.getQueryData('list-items')
+
+        queryCache.setQueryData('list-items', old => {
+          return old.filter(item => item.id !== removedItem.id)
+        })
+
+        return () => queryCache.setQueryData('list-items', previousItems)
+      },
+      ...options,
+      ...defaultMutationOptions,
+    },
   )
 }
 
