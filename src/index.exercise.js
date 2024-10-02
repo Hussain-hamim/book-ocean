@@ -5,6 +5,7 @@ import * as React from 'react'
 import {createRoot} from 'react-dom/client'
 import {ReactQueryConfigProvider} from 'react-query'
 import {App} from './app'
+import {AuthProvider} from 'context/auth-context'
 
 const queryConfig = {
   retry(failureCount, error) {
@@ -23,7 +24,9 @@ loadDevTools(() => {
   const root = createRoot(document.getElementById('root'))
   root.render(
     <ReactQueryConfigProvider config={queryConfig}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ReactQueryConfigProvider>,
   )
   rootRef.current = root
