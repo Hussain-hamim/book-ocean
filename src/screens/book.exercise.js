@@ -16,12 +16,12 @@ import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
 
 // 💣 remove the user prop
-function BookScreen({user}) {
+function BookScreen() {
   const {bookId} = useParams()
   // 💣 remove the user argument
-  const book = useBook(bookId, user)
+  const book = useBook(bookId)
   // 💣 remove the user argument
-  const listItem = useListItem(bookId, user)
+  const listItem = useListItem(bookId)
 
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
@@ -67,7 +67,7 @@ function BookScreen({user}) {
               {book.loadingBook ? null : (
                 <StatusButtons
                   // 💣 remove the user prop here
-                  user={user}
+                  // user={user}
                   book={book}
                 />
               )}
@@ -77,7 +77,7 @@ function BookScreen({user}) {
             {listItem?.finishDate ? (
               <Rating
                 // 💣 remove the user prop here
-                user={user}
+                // user={user}
                 listItem={listItem}
               />
             ) : null}
@@ -90,7 +90,7 @@ function BookScreen({user}) {
       {!book.loadingBook && listItem ? (
         <NotesTextarea
           // 💣 remove the user prop here
-          user={user}
+          // user={user}
           listItem={listItem}
         />
       ) : null}
@@ -117,12 +117,13 @@ function ListItemTimeframe({listItem}) {
 }
 
 // 💣 remove the user prop here
-function NotesTextarea({listItem, user}) {
+function NotesTextarea({listItem}) {
   // 💣 remove the user argument here
-  const [mutate, {error, isError, isLoading}] = useUpdateListItem(user)
-  const debouncedMutate = React.useMemo(() => debounceFn(mutate, {wait: 300}), [
-    mutate,
-  ])
+  const [mutate, {error, isError, isLoading}] = useUpdateListItem()
+  const debouncedMutate = React.useMemo(
+    () => debounceFn(mutate, {wait: 300}),
+    [mutate],
+  )
 
   function handleNotesChange(e) {
     debouncedMutate({id: listItem.id, notes: e.target.value})

@@ -3,6 +3,8 @@ import {useQuery, queryCache} from 'react-query'
 // 🐨 get AuthContext from context/auth-context
 import {client} from './api-client'
 import bookPlaceholderSvg from 'assets/book-placeholder.svg'
+import {AuthContext} from 'context/auth-context'
+import * as React from 'react'
 
 const loadingBook = {
   title: 'Loading...',
@@ -36,15 +38,19 @@ const getBookSearchConfig = (query, user) => ({
 })
 
 // 💣 remove the user argument here
-function useBookSearch(query, user) {
+function useBookSearch(query) {
   // 🐨 get the user from React.useContext(AuthContext)
+  const {user} = React.useContext(AuthContext)
+
   const result = useQuery(getBookSearchConfig(query, user))
   return {...result, books: result.data ?? loadingBooks}
 }
 
 // 💣 remove the user argument here
-function useBook(bookId, user) {
+function useBook(bookId) {
   // 🐨 get the user from React.useContext(AuthContext)
+  const {user} = React.useContext(AuthContext)
+
   const {data} = useQuery({
     queryKey: ['book', {bookId}],
     queryFn: () =>
@@ -61,10 +67,22 @@ function useBook(bookId, user) {
 // 2. Returns a memoized callback (React.useCallback) version of this
 // refetchBookSearchQuery function. It should no longer need to accept user as
 // an argument and instead lists it as a dependency.
-async function refetchBookSearchQuery(user) {
-  queryCache.removeQueries('bookSearch')
-  await queryCache.prefetchQuery(getBookSearchConfig('', user))
+function useRefetchBookSearchQuery() {
+  const {user} = React.useContext(AuthContext)
+
+  return React.useCallback(
+    async function refetchBookSearchQuery() {
+      queryCache.removeQueries('bookSearch')
+      await queryCache.prefetchQuery(getBookSearchConfig('', user))
+    },
+    [user],
+  )
 }
+
+// async function refetchBookSearchQuery(user) {
+//   queryCache.removeQueries('bookSearch')
+//   await queryCache.prefetchQuery(getBookSearchConfig('', user))
+// }
 
 const bookQueryConfig = {
   staleTime: 1000 * 60 * 60,
@@ -75,4 +93,4 @@ function setQueryDataForBook(book) {
   queryCache.setQueryData(['book', {bookId: book.id}], book, bookQueryConfig)
 }
 
-export {useBook, useBookSearch, refetchBookSearchQuery, setQueryDataForBook}
+export {useBook, useBookSearch, useRefetchBookSearchQuery, setQueryDataForBook}

@@ -10,7 +10,7 @@ import {Rating} from './rating'
 
 // 💣 remove the user prop
 // the children components that needed it can get it from context
-function BookRow({user, book}) {
+function BookRow({book}) {
   const {title, author, coverImageUrl} = book
 
   const listItem = useListItem(book.id)
@@ -76,7 +76,7 @@ function BookRow({user, book}) {
               {listItem?.finishDate ? (
                 <Rating
                   // 💣 remove the user prop here
-                  user={user}
+                  // user={user}
                   listItem={listItem}
                 />
               ) : null}
@@ -113,7 +113,7 @@ function BookRow({user, book}) {
       >
         <StatusButtons
           // 💣 remove the user prop here
-          user={user}
+          // user={user}
           book={book}
         />
       </div>
