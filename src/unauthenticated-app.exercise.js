@@ -141,7 +141,9 @@ function UnauthenticatedApp() {
         */}
         <Modal>
           <ModalOpenButton>
-            <Button variant="primary">Login</Button>
+            <Button onClick={() => console.log('salaam')} variant="primary">
+              Login
+            </Button>
           </ModalOpenButton>
 
           <ModalContents aria-label="login form" title="Login">

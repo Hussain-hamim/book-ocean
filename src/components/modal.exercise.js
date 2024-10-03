@@ -51,7 +51,7 @@ const callAll =
 function ModalDismissButton({children: child}) {
   const [, setIsOpen] = React.useContext(ModalContext)
   return React.cloneElement(child, {
-    // onClick: () => setIsOpen(false),
+    // onClick: () => setIsOpen(true), // old solution
     onClick: callAll(() => setIsOpen(false), child.props.onClick),
   })
 }
@@ -61,8 +61,14 @@ function ModalDismissButton({children: child}) {
 function ModalOpenButton({children: child}) {
   const [, setIsOpen] = React.useContext(ModalContext)
   return React.cloneElement(child, {
-    // onClick: () => setIsOpen(true),
-    onClick: callAll(() => setIsOpen(true), child.props.onClick),
+    // onClick: callAll(() => setIsOpen(true), child.props.onClick),
+    //// alternative simple solution to above code
+    onClick: () => {
+      setIsOpen(true)
+      if (child.props.onClick) {
+        child.props.onClick()
+      }
+    },
   })
 }
 
