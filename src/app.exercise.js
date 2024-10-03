@@ -6,6 +6,7 @@ import {FullPageSpinner} from './components/lib'
 // 🐨 exchange these for React.lazy calls
 const AuthenticatedApp = React.lazy(() => import('./authenticated-app'))
 const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
+// const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 
 function App() {
   const {user} = useAuth()
