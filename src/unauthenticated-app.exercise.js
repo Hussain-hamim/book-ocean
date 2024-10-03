@@ -155,7 +155,7 @@ function UnauthenticatedApp() {
             <Button variant="primary">Login</Button>
           </ModalOpenButton>
 
-          <ModalContents>
+          <ModalContents aria-label="login form">
             {circleDismissButton}
             <h3 css={{textAlign: 'center', fontSize: '2em'}}>Login</h3>
             <LoginForm
@@ -170,7 +170,7 @@ function UnauthenticatedApp() {
             <Button variant="secondary">Register</Button>
           </ModalOpenButton>
 
-          <ModalContents>
+          <ModalContents aria-label="Registration form">
             {circleDismissButton}
             <h3 css={{textAlign: 'center', fontSize: '2em'}}>Register</h3>
             <LoginForm
