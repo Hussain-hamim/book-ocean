@@ -41,10 +41,17 @@ function Modal(props) {
 // 📜 https://react.dev/reference/react/cloneElement
 // 💰 to get the setIsOpen function you'll need, you'll have to useContext!
 // 💰 keep in mind that the children prop will be a single child (the user's button)
+
+const callAll =
+  (...fns) =>
+  (...args) =>
+    fns.forEach(fn => fn && fn(...args))
+
 function ModalDismissButton({children: child}) {
   const [, setIsOpen] = React.useContext(ModalContext)
   return React.cloneElement(child, {
-    onClick: () => setIsOpen(false),
+    // onClick: () => setIsOpen(false),
+    onClick: callAll(() => setIsOpen(false), child.props.onClick),
   })
 }
 
@@ -53,7 +60,8 @@ function ModalDismissButton({children: child}) {
 function ModalOpenButton({children: child}) {
   const [, setIsOpen] = React.useContext(ModalContext)
   return React.cloneElement(child, {
-    onClick: () => setIsOpen(true),
+    // onClick: () => setIsOpen(true),
+    onClick: callAll(() => setIsOpen(true), child.props.onClick),
   })
 }
 
