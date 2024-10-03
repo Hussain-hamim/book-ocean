@@ -4,7 +4,10 @@ import {useAuth} from './context/auth-context'
 import {FullPageSpinner} from './components/lib'
 
 // 🐨 exchange these for React.lazy calls
-const AuthenticatedApp = React.lazy(() => import('./authenticated-app'))
+// const AuthenticatedApp = React.lazy(() => import('./authenticated-app'))
+const AuthenticatedApp = React.lazy(() =>
+  import(/* webpackPrefetch: true */ './authenticated-app'),
+)
 const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 // const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 
