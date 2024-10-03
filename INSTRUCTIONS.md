@@ -20,7 +20,7 @@ _everything_ your application can do on the page at the same time. So if instead
 we split the application code and assets into logical "chunks" then we could
 load only the chunks necessary for what the user wants to do right now.
 
-This is called "Code splitting".
+This is called "_Code splitting_".
 
 📜 Here are some relevant docs from React
 
