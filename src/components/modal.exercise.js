@@ -3,7 +3,8 @@
 // 📜 https://reacttraining.com/reach-ui/dialog/
 import {jsx} from '@emotion/core'
 import React from 'react'
-import {Dialog} from './lib'
+import {CircleButton, Dialog} from './lib'
+import {VisuallyHidden} from '@reach/visually-hidden'
 
 // 💰 Here's a reminder of how your components will be used:
 /*
@@ -68,10 +69,29 @@ function ModalOpenButton({children: child}) {
 // 🐨 create a ModalContents component which renders the Dialog.
 // Set the isOpen prop and the onDismiss prop should set isOpen to close
 // 💰 be sure to forward along the rest of the props (especially children).
-function ModalContents(props) {
+function ModalContentsBase(props) {
   const [isOpen, setIsOpen] = React.useContext(ModalContext)
   return (
     <Dialog isOpen={isOpen} onDismiss={() => setIsOpen(false)} {...props} />
+  )
+}
+
+function ModalContents({title, children, props}) {
+  return (
+    <ModalContentsBase {...props}>
+      <div css={{display: 'flex', justifyContent: 'flex-end'}}>
+        <ModalDismissButton>
+          <CircleButton>
+            <VisuallyHidden>Close</VisuallyHidden>
+            <span aria-hidden>×</span>
+          </CircleButton>
+        </ModalDismissButton>
+      </div>
+
+      <h3 css={{textAlign: 'center', fontSize: '2em'}}>{title}</h3>
+
+      {children}
+    </ModalContentsBase>
   )
 }
 

@@ -4,7 +4,10 @@ import {jsx} from '@emotion/core'
 import * as React from 'react'
 import {Dialog} from './lib'
 
-const callAll = (...fns) => (...args) => fns.forEach(fn => fn && fn(...args))
+const callAll =
+  (...fns) =>
+  (...args) =>
+    fns.forEach(fn => fn && fn(...args))
 
 const ModalContext = React.createContext()
 
@@ -28,7 +31,7 @@ function ModalOpenButton({children: child}) {
   })
 }
 
-function ModalContents(props) {
+function ModalContentsBase(props) {
   const [isOpen, setIsOpen] = React.useContext(ModalContext)
   return (
     <Dialog isOpen={isOpen} onDismiss={() => setIsOpen(false)} {...props} />
