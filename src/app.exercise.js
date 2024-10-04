@@ -11,8 +11,6 @@ const AuthenticatedApp = React.lazy(() =>
 const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 // const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 
-// const DarkModeContext = React.createContext()
-
 function App() {
   // const [darkMode, setDarkMode] = React.useState({darkMode: false})
   const {user} = useAuth()
