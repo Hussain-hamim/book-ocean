@@ -22,7 +22,7 @@ variable and how to fix it here for [windows][win-path] or
 
 ## Demo
 
-Hosted on [Book Ocean](https://https://book-ocean.vercel.app/discover)
+Hosted on [Book Ocean](https://book-ocean.vercel.app/discover)
 
 ## Setup
 
