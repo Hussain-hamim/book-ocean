@@ -46,7 +46,7 @@ function AuthenticatedApp() {
         }}
       >
         <button
-          // onClick={mode => setDarkMode({darkMode: !darkMode.darkMode})}
+          onClick={mode => setDarkMode({darkMode: !darkMode.darkMode})}
           css={{
             marginRight: '10px',
             marginLeft: '10px',
