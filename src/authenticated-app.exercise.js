@@ -56,7 +56,13 @@ function AuthenticatedApp() {
         >
           {darkMode.darkMode ? <FaMoon /> : <FaSun />}
         </button>
-        {user.username}
+        <span
+          css={{
+            color: darkMode.darkMode ? 'white' : colors.text,
+          }}
+        >
+          {user.username}
+        </span>
         <Button variant="secondary" css={{marginLeft: '10px'}} onClick={logout}>
           Logout
         </Button>
