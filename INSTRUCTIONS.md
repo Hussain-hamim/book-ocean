@@ -1,4 +1,4 @@
-# Render as you fetch
+# Performance
 
 ## 📝 Your Notes
 
@@ -6,117 +6,173 @@ Elaborate on your learnings here in `INSTRUCTIONS.md`
 
 ## Background
 
-Something that negatively impacts the performance of our application is what's
-called the "waterfall effect." This gets its name from the "waterfall" view in
-the browser's Network developer tools which shows when the browser starts
-requesting a certain asset and when the request for that asset finishes. There
-are some assets we need to load before the app can render the initial page. The
-earlier we can start requesting those assets, the faster we can show the user
-their data.
+One of the most common performance problems web applications face is initial
+page load. As the application grows, the size of the JavaScript bundle grows as
+well. With every feature, you add more dependencies and your own code to the
+size of the JavaScript bundle you're sending to users.
 
-Lazily loading code is great because it means the user doesn't have to load
-stuff they're not going to need until they actually need it. However, it can
-come with a cost of waterfalls which means your user is left waiting for one
-request (for code, data, or assets) to finish loading before they can start
-requesting the next bit needed code, data, or assets.
+This has adverse performance affects because it takes longer to send that data
+over the internet and it also takes more time for the browser to process that
+data (for example: to parse and run the JavaScript).
 
-Render as you fetch is all about kicking off requests for the needed code, data,
-or assets as soon as you have the information you need to retrieve them. You go
-about this by applying this process:
+But no matter how big your application grows, it's unlikely the user needs
+_everything_ your application can do on the page at the same time. So if instead
+we split the application code and assets into logical "chunks" then we could
+load only the chunks necessary for what the user wants to do right now.
 
-1. Take a look at everything you're loading
-2. Determine the minimal amount of things you need to start rendering something
-   useful to the user
-3. Start loading those things as soon as you possibly can
+This is called "_Code splitting_".
+
+📜 Here are some relevant docs from React
+
+- [Code-splitting in the React Docs](https://reactjs.org/docs/code-splitting.html)
+
+This optimization is intended to improve what's called the
+["Time to First Meaningful Paint"](https://web.dev/first-meaningful-paint/). The
+sooner users can see the content they're coming for, the better and this is a
+metric for measuring this.
 
 ## Exercise
 
 Production deploys:
 
-- [Exercise](https://exercises-10-render-as-you-fetch.bookshelf.lol/exercise)
-- [Final](https://exercises-10-render-as-you-fetch.bookshelf.lol/)
+- [Exercise](https://exercises-09-performance.bookshelf.lol/exercise)
+- [Final](https://exercises-09-performance.bookshelf.lol/)
 
-In this exercise, we're going to see how we can squeeze our network waterfall
-over the left as much as we can for the things the user needs. We're a little
-limited because this is a client-side application only. You can take this
-further with server side rendered applications. So if your app requires
-_screaming_ fast performance, then consider investigating a server-side
-rendering framework like [Next.js](https://nextjs.org/) or a static site
-generation framework like [Gatsby](https://www.gatsbyjs.com/).
+This exercise is all about improving the time to first meaningful paint. Our app
+is pretty small as it is, so some of our optimizations might be a little
+overkill. We're already scoring 99/100 on our
+[Lighthouse](https://developers.google.com/web/tools/lighthouse) score, but in
+medium-to-large size apps, these changes will make much more significant and
+valuable impacts on the performance of your application in production.
 
-Here's what happens when a logged-in user goes to our app:
+In fact, with an app as small as this, it's hard to get measurements indicating
+that we've improved things at all, so the optimizations we'll do in this
+exercise should really only be applied to larger apps. As always: measure before
+and after and choose the faster one!
 
-1. Get the document (`index.html`)
-2. Get the linked JS (`<script src="...">`) and CSS
-   (`<link rel="stylesheet" href="...">`)
-3. Parse the JS
-4. Execute the JS
+👨‍💼 We're having people close the browser before our login page finishes loading!
+We need the login page to load faster!
 
-By code-splitting, we're reducing the amount of work the browser has to do in
-step 3 and 4. But there's more we can do during that execute JS step. Let's
-break down what happens in our app as the browser executes the JavaScript:
+We have two parts of our app, the authenticated side, and the unauthenticated
+side. The users who are coming to the unauthenticated app are loading everything
+in the app even though they're not using it all.
 
-1. Call into all the modules (in import order)
-2. Create a bunch of React components
-3. Render those components with `ReactDOM.render`. At this point, React calls
-   into all of our components to get the react elements
-4. Our components are "mounted" by React and our `useEffect` callbacks are
-   called
-5. We make a fetch to get the logged in user's information and the AuthProvider
-   displays a spinner while we wait.
-6. The user's information comes back successfully, so now we render the
-   Authenticated app (luckily we've pre-fetched that thanks to the webpack magic
-   comment)
-7. We make a fetch to get the user's list items. We show an empty list while we
-   wait.
-8. The list items come back and we render those list items.
+So your job is to implement "Code Splitting" so we lazily load the Authenticated
+app so users don't have to pay the cost for the authenticated app until they've
+actually logged in.
 
-So what's the optimization we can make here? Well, everywhere you see "while we
-wait" could be optimized further. In particular, we could start fetching the
-user's information as well as their list items as soon as our JavaScript
-executes rather than waiting for the app to render all our components.
-
-For this first exercise, let's just start by triggering the fetch for the user
-earlier in the chain of events. Specifically, we'll start the user fetch request
-to something that happens during step 1.
+> 💰 Remember, `React.lazy` expects the module you're importing to export a
+> React component as the default export. So you'll need to update those exports.
+> Also, due to the way we're structuring the exercises, you'll also need to
+> update the "main" module that's re-exporting things. So you'll make a change
+> to `src/authenticated-app.exercise.js` as well as `src/authenticated-app.js`!
 
 ### Files
 
-- `src/context/auth-context.js`
+- `src/app.js`
+- `src/authenticated-app.js`
+- `src/unauthenticated-app.js`
 
 ## Extra Credit
 
-### 1. 💯 Preload all initial data
+### 1. 💯 Prefetch the Authenticated App
 
-[Production deploy](https://exercises-10-render-as-you-fetch.bookshelf.lol/extra-1)
+[Production deploy](https://exercises-09-performance.bookshelf.lol/extra-1)
 
-For this extra credit, we want to move the list items fetch request to something
-that happens during step 1 as well. Luckily for us, our backend engineers are on
-board with that, so they created a special endpoint that will give you all the
-data you need in one request (otherwise we'd have to make multiple requests
-which is fine, just not as cool).
+When the user lands on the login screen, it's really likely they'll want to load
+the regular app, so go ahead and use
+[webpack magic comments](https://webpack.js.org/api/module-methods/#magic-comments)
+to prefetch the authenticated app module.
 
-If you make a GET to the endpoint `bootstrap`, it will send you an object with
-the `user` and the user's `listItems`. You can use the `user` just like we're
-doing right now with the `me` endpoint (stick it in our AuthProvider), and then
-you can put the `listItems` in the `queryCache` so the user has their list items
-all ready to go as soon as the app finishes loading.
+This will reduce the amount of time it takes to render the authenticated app
+once the user logs in because the code will be pre-loaded, but the user won't
+have to wait for that code to download before they can use the login screen.
 
-This will make a noticeable impact on the loading experience. You'll notice this
-improvement if you have a user with list items, then open their `/list` page.
-Before this change, you'll see a blank list and the list items will then appear
-a moment later. With this change, the list items are there instantly.
+**Files:**
 
-📜
-[`queryCache.setQueryData` docs](https://github.com/tannerlinsley/react-query/tree/24bac238bb17dda042fe611ded536f7c422cdea9#querycachesetquerydata)
+- `src/app.js`
+
+### 2. 💯 Memoize context
+
+[Production deploy](https://exercises-09-performance.bookshelf.lol/extra-2)
+
+If a context provider re-renders with a different `value` from the previous
+render, all consumers will re-render. When writing idiomatic context provider
+components which are rendered globally in your app, you can take advantage of
+[this built-in optimization](https://kentcdodds.com/blog/optimize-react-re-renders),
+and the only time the provider re-renders is when the state actually changes
+(which is when you _want_ consumers to re-render anyway).
+
+However, it's often a good idea to memoize the functions we expose through
+context so those functions can be passed into dependency arrays. And we'll
+memoize the context value as well.
 
 **Files:**
 
 - `src/context/auth-context.js`
+
+### 3. 💯 Production Monitoring
+
+[Production deploy](https://exercises-09-performance.bookshelf.lol/extra-3)
+
+We want to be able to monitor the application performance in production so we
+can be notified if there's a huge spike in performance issues. There's a small
+performance penalty cost for this so we have modify how the app is built so it
+includes the React profiling tools, but having the information is often worth
+the cost. Facebook actually will only serve the profiling-enabled build of their
+app to a subset of users and that's something that you might consider when
+adding this to your own app.
+
+Because we're using `react-scripts` (thanks to create-react-app), we can use the
+`--profile` flag to enable building for production with the profiling
+information enabled. In fact, we're already doing this, but I wanted to make
+sure you don't miss that step. For more information on this, read
+[Profile a React App for Performance](https://kentcdodds.com/blog/profile-a-react-app-for-performance).
+
+With that in place, we can now tell React where we want to start collecting
+performance information. We're going to be using React's
+[`<Profiler />`](https://react.dev/reference/react/Profiler) component to do
+this performance measuring and reporting. You'll want to send the data for the
+profile in a `POST` request to `/profile` (`client('profile', {body: data}))`).
+Note that it is not necessary to send a `token` because this is not an
+authenticated request (because we want this to happen for unauthenticated users
+too).
+
+There are lots of ways to go about doing this and you can feel free to do this
+however you like, but in my finished example, I created a component with the
+following API:
+
+```javascript
+<Profiler id="Unique Identifier" metadata={{extra: 'info for the report'}}>
+  <Components />
+  <To />
+  <Be />
+  <Profiled />
+</Profiler>
+```
+
+Then the `Profiler` will be responsible for sending the profile data that we get
+from React to the `/profile` endpoint.
+
+There are various places where this information might be useful. You can feel
+free to add it wherever you like.
+
+**Files:**
+
+- `src/components/profiler.js`
+- `src/index.js`
+- `src/components/list-item-list.js`
+- `src/screens/book.js`
+- `src/screens/discover.js`
+
+... 4. 💯 Add interaction tracing
+
+This API was removed from React, so we've deleted the video and exercise from
+this workshop. Learn more: https://github.com/facebook/react/issues/21285
 
 ## 🦉 Elaboration and Feedback
 
 After the instruction, if you want to remember what you've just learned, then
 fill out the elaboration and feedback form:
 
-https://ws.kcd.im/?ws=Build%20React%20Apps&e=10%3A%20Render%20as%20you%20fetch&em=
+https://ws.kcd.im/?ws=Build%20React%20Apps&e=09%3A%20Performance&em=

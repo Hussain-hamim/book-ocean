@@ -1,5 +1,5 @@
 <div>
-  <h1 align="center"><a href="https://www.epicreact.dev/modules/build-an-epic-react-app-v1/build-an-epic-react-app-welcome">Build an Epic React App 🚀 EpicReact.Dev</a></h1>
+  <h1 align="center"><a href="https://epicreact.dev/app">Build an Epic React App 🚀 EpicReact.Dev</a></h1>
   <strong>
     Building a full React application
   </strong>
@@ -244,23 +244,31 @@ window.__bookshelf.purgeListItems()
   
   <summary>Running "node go" does not list any branches</summary>
   
-This means there was something wrong when you ran the setup.
-
-> If you made your own fork of `bookshelf` through GitHub, you may have only got
-> the `main` branch -- that's the default option
-
-Add a new `upstream` remote
+This means there was something wrong when you ran the setup. Try running:
 
 ```
-git remote add upstream https://github.com/kentcdodds/bookshelf.git
+node ./scripts/track-branches.js
 ```
 
-> You might get an `error: remote upstream already exists.` -- no problem!
-
-Track all the branches from that original repository
+If you're still not getting the branches, then you can do this manually:
 
 ```
-git push origin --tags "refs/remotes/upstream/*:refs/heads/*"
+git branch --track "exercises/01-bootstrap" "origin/exercises/01-bootstrap"
+git branch --track "exercises/02-styles" "origin/exercises/02-styles"
+git branch --track "exercises/03-data-fetching" "origin/exercises/03-data-fetching"
+git branch --track "exercises/04-authentication" "origin/exercises/04-authentication"
+git branch --track "exercises/05-routing" "origin/exercises/05-routing"
+git branch --track "exercises/06-cache-management" "origin/exercises/06-cache-management"
+git branch --track "exercises/07-context" "origin/exercises/07-context"
+git branch --track "exercises/08-compound-components" "origin/exercises/08-compound-components"
+git branch --track "exercises/09-performance" "origin/exercises/09-performance"
+git branch --track "exercises/10-render-as-you-fetch" "origin/exercises/10-render-as-you-fetch"
+git branch --track "exercises/11-unit-testing" "origin/exercises/11-unit-testing"
+git branch --track "exercises/12-testing-hooks-and-components" "origin/exercises/12-testing-hooks-and-components"
+git branch --track "exercises/13-integration-testing" "origin/exercises/13-integration-testing"
+git branch --track "exercises/14-e2e-testing" "origin/exercises/14-e2e-testing"
+
+git pull --all
 ```
 
 </details>
@@ -362,7 +370,6 @@ Thanks goes to these wonderful people
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/PM6"><img src="https://avatars.githubusercontent.com/u/12296209?v=4?s=100" width="100px;" alt="PM6"/><br /><sub><b>PM6</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=PM6" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/benjaminmatthews"><img src="https://avatars.githubusercontent.com/u/6886936?v=4?s=100" width="100px;" alt="benjaminmatthews"/><br /><sub><b>benjaminmatthews</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=benjaminmatthews" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://junagao.com"><img src="https://avatars.githubusercontent.com/u/615616?v=4?s=100" width="100px;" alt="juliane nagao"/><br /><sub><b>juliane nagao</b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=junagao" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Creeland"><img src="https://avatars.githubusercontent.com/u/518406?v=4?s=100" width="100px;" alt="Creeland A. Provinsal "/><br /><sub><b>Creeland A. Provinsal </b></sub></a><br /><a href="https://github.com/kentcdodds/bookshelf/commits?author=Creeland" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>

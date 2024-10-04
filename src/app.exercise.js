@@ -8,9 +8,7 @@ import {FullPageSpinner} from './components/lib'
 const AuthenticatedApp = React.lazy(() =>
   import(/* webpackPrefetch: true */ './authenticated-app'),
 )
-const UnauthenticatedApp = React.lazy(() =>
-  import('./unauthenticated-app.exercise'),
-)
+const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 // const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 
 function App() {

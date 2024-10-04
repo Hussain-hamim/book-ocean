@@ -15,7 +15,7 @@ function handleUserResponse({user}) {
   return user
 }
 
-function login({username = 'hussain', password = 123}) {
+function login({username, password}) {
   return client('login', {username, password}).then(handleUserResponse)
 }
 
@@ -48,4 +48,4 @@ async function client(endpoint, data) {
   })
 }
 
-export {getToken, localStorageKey, login, logout, register}
+export {getToken, login, register, logout, localStorageKey}

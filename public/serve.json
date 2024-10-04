@@ -1,10 +1,9 @@
 {
-    "redirects": [
-      {
-        "source": "/",
-        "destination": "/discover",
-        "type": 302
-      }
-    ]
-  }
-  
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/list",
+      "type": 302
+    }
+  ]
+}

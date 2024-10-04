@@ -8,7 +8,7 @@ const Logo = ({width = '48', height = '48'}) => {
       viewBox={`0 0 48 48`}
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>books ocean</title>
+      <title>Bookshelf</title>
       <g>
         <path
           d="M12,5H2C1.44772,5,1,5.44772,1,6v27h12V6C13,5.44772,12.55229,5,12,5z"
