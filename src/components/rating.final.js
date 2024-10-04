@@ -2,10 +2,10 @@
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
-import {useMutation, queryCache} from 'react-query'
-import {client} from 'utils/api-client'
+import {useUpdateListItem} from 'utils/list-items'
 import {FaStar} from 'react-icons/fa'
 import * as colors from 'styles/colors'
+import {ErrorMessage} from 'components/lib'
 
 const visuallyHiddenCSS = {
   border: '0',
@@ -18,17 +18,9 @@ const visuallyHiddenCSS = {
   width: '1px',
 }
 
-function Rating({listItem, user}) {
+function Rating({listItem}) {
   const [isTabbing, setIsTabbing] = React.useState(false)
-  const [update] = useMutation(
-    updates =>
-      client(`list-items/${updates.id}`, {
-        method: 'PUT',
-        data: updates,
-        token: user.token,
-      }),
-    {onSettled: () => queryCache.invalidateQueries('list-items')},
-  )
+  const [update, {error, isError}] = useUpdateListItem()
 
   React.useEffect(() => {
     function handleKeyDown(event) {
@@ -108,6 +100,13 @@ function Rating({listItem, user}) {
       }}
     >
       <span css={{display: 'flex'}}>{stars}</span>
+      {isError ? (
+        <ErrorMessage
+          error={error}
+          variant="inline"
+          css={{marginLeft: 6, fontSize: '0.7em'}}
+        />
+      ) : null}
     </div>
   )
 }

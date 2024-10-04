@@ -1,12 +1,9 @@
-// no final
+// export * from './books.final'
 
 export * from './books.exercise'
 
-// 💯 Make hooks
+// 💯 create a `useAuth` hook
 // export * from './books.extra-1'
 
-// 💯 Prefetch the book search query
-// export * from './books.extra-5'
-
-// 💯 Add books to the query cache
-// export * from './books.extra-6'
+// 💯 create a `useClient` hook
+// export * from './books.extra-4'

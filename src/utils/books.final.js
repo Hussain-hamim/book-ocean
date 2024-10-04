@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {useQuery, queryCache} from 'react-query'
-import {useAuth} from 'context/auth-context'
+import {AuthContext} from 'context/auth-context'
 import {client} from './api-client'
 import bookPlaceholderSvg from 'assets/book-placeholder.svg'
 
@@ -34,13 +34,13 @@ const getBookSearchConfig = (query, user) => ({
 })
 
 function useBookSearch(query) {
-  const {user} = useAuth()
+  const {user} = React.useContext(AuthContext)
   const result = useQuery(getBookSearchConfig(query, user))
   return {...result, books: result.data ?? loadingBooks}
 }
 
 function useBook(bookId) {
-  const {user} = useAuth()
+  const {user} = React.useContext(AuthContext)
   const {data} = useQuery({
     queryKey: ['book', {bookId}],
     queryFn: () =>
@@ -50,7 +50,7 @@ function useBook(bookId) {
 }
 
 function useRefetchBookSearchQuery() {
-  const {user} = useAuth()
+  const {user} = React.useContext(AuthContext)
   return React.useCallback(
     async function refetchBookSearchQuery() {
       queryCache.removeQueries('bookSearch')

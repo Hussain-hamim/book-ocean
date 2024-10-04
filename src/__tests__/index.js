@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom'
 import '@testing-library/jest-dom/extend-expect'
 import {
   screen,

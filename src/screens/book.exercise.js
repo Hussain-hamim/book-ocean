@@ -6,29 +6,22 @@ import debounceFn from 'debounce-fn'
 import {FaRegCalendarAlt} from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
 import {useParams} from 'react-router-dom'
-import {useMutation, useQuery, queryCache} from 'react-query'
-import {client} from 'utils/api-client'
-
+import {useBook} from 'utils/books'
+import {useListItem, useUpdateListItem} from 'utils/list-items'
 import {formatDate} from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
-import {ErrorMessage, Spinner, Textarea} from 'components/lib'
+import {Spinner, Textarea, ErrorMessage} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
-import bookPlaceholderSvg from 'assets/book-placeholder.svg'
-import {useBook} from 'utils/books'
-import {useListItem, useUpdateListItem} from 'utils/list-items'
 
-function BookScreen({user}) {
+// 💣 remove the user prop
+function BookScreen() {
   const {bookId} = useParams()
-
-  const book = useBook(bookId, user)
-
-  const listItem = useListItem(user, bookId)
-
-  // 🦉 NOTE: the backend doesn't support getting a single list-item by it's ID
-  // and instead expects us to cache all the list items and look them up in our
-  // cache. This works out because we're using react-query for caching!
+  // 💣 remove the user argument
+  const book = useBook(bookId)
+  // 💣 remove the user argument
+  const listItem = useListItem(bookId)
 
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
@@ -72,13 +65,21 @@ function BookScreen({user}) {
               }}
             >
               {book.loadingBook ? null : (
-                <StatusButtons user={user} book={book} />
+                <StatusButtons
+                  // 💣 remove the user prop here
+                  // user={user}
+                  book={book}
+                />
               )}
             </div>
           </div>
           <div css={{marginTop: 10, height: 46}}>
             {listItem?.finishDate ? (
-              <Rating user={user} listItem={listItem} />
+              <Rating
+                // 💣 remove the user prop here
+                // user={user}
+                listItem={listItem}
+              />
             ) : null}
             {listItem ? <ListItemTimeframe listItem={listItem} /> : null}
           </div>
@@ -87,7 +88,11 @@ function BookScreen({user}) {
         </div>
       </div>
       {!book.loadingBook && listItem ? (
-        <NotesTextarea user={user} listItem={listItem} />
+        <NotesTextarea
+          // 💣 remove the user prop here
+          // user={user}
+          listItem={listItem}
+        />
       ) : null}
     </div>
   )
@@ -111,9 +116,10 @@ function ListItemTimeframe({listItem}) {
   )
 }
 
-function NotesTextarea({listItem, user}) {
-  const [mutate, {error, isError, isLoading}] = useUpdateListItem(user)
-
+// 💣 remove the user prop here
+function NotesTextarea({listItem}) {
+  // 💣 remove the user argument here
+  const [mutate, {error, isError, isLoading}] = useUpdateListItem()
   const debouncedMutate = React.useMemo(
     () => debounceFn(mutate, {wait: 300}),
     [mutate],
