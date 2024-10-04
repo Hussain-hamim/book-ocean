@@ -2,7 +2,6 @@
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
-import {queryCache} from 'react-query'
 import * as auth from 'auth-provider'
 import {client} from 'utils/api-client'
 import {useAsync} from 'utils/hooks'
@@ -37,16 +36,29 @@ function AuthProvider(props) {
   } = useAsync()
 
   React.useEffect(() => {
-    run(getUser())
+    const userPromise = getUser()
+    run(userPromise)
   }, [run])
 
-  const login = form => auth.login(form).then(user => setData(user))
-  const register = form => auth.register(form).then(user => setData(user))
-  const logout = () => {
+  const login = React.useCallback(
+    form => auth.login(form).then(user => setData(user)),
+    [setData],
+  )
+  const register = React.useCallback(
+    form => auth.register(form).then(user => setData(user)),
+    [setData],
+  )
+  const logout = React.useCallback(() => {
     auth.logout()
-    queryCache.clear()
     setData(null)
-  }
+  }, [setData])
+
+  const value = React.useMemo(() => ({user, login, logout, register}), [
+    login,
+    logout,
+    register,
+    user,
+  ])
 
   if (isLoading || isIdle) {
     return <FullPageSpinner />
@@ -57,7 +69,6 @@ function AuthProvider(props) {
   }
 
   if (isSuccess) {
-    const value = {user, login, register, logout}
     return <AuthContext.Provider value={value} {...props} />
   }
 
@@ -72,4 +83,14 @@ function useAuth() {
   return context
 }
 
-export {AuthProvider, useAuth}
+function useClient() {
+  const {
+    user: {token},
+  } = useAuth()
+  return React.useCallback(
+    (endpoint, config) => client(endpoint, {...config, token}),
+    [token],
+  )
+}
+
+export {AuthProvider, useAuth, useClient}

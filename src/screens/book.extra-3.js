@@ -7,79 +7,80 @@ import {FaRegCalendarAlt} from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
 import {useParams} from 'react-router-dom'
 import {useBook} from 'utils/books'
-import {useListItem, useUpdateListItem} from 'utils/list-items'
 import {formatDate} from 'utils/misc'
+import {useListItem, useUpdateListItem} from 'utils/list-items'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
-import {Textarea, ErrorMessage} from 'components/lib'
+import {Spinner, Textarea, ErrorMessage} from 'components/lib'
 import {Rating} from 'components/rating'
+import {Profiler} from 'components/profiler'
 import {StatusButtons} from 'components/status-buttons'
 
-function BookScreen({user}) {
+function BookScreen() {
   const {bookId} = useParams()
-  const book = useBook(bookId, user)
-  const listItem = useListItem(user, bookId)
+  const book = useBook(bookId)
+  const listItem = useListItem(bookId)
 
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
   return (
-    <div>
-      <div
-        css={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 2fr',
-          gridGap: '2em',
-          marginBottom: '1em',
-          [mq.small]: {
-            display: 'flex',
-            flexDirection: 'column',
-          },
-        }}
-      >
-        <img
-          src={coverImageUrl}
-          alt={`${title} book cover`}
-          css={{width: '100%', maxWidth: '14rem'}}
-        />
-        <div>
-          <div css={{display: 'flex', position: 'relative'}}>
-            <div css={{flex: 1, justifyContent: 'space-between'}}>
-              <h1>{title}</h1>
-              <div>
-                <i>{author}</i>
-                <span css={{marginRight: 6, marginLeft: 6}}>|</span>
-                <i>{publisher}</i>
+    <Profiler id="Book Screen" metadata={{bookId, listItemId: listItem?.id}}>
+      <div>
+        <div
+          css={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 2fr',
+            gridGap: '2em',
+            marginBottom: '1em',
+            [mq.small]: {
+              display: 'flex',
+              flexDirection: 'column',
+            },
+          }}
+        >
+          <img
+            src={coverImageUrl}
+            alt={`${title} book cover`}
+            css={{width: '100%', maxWidth: '14rem'}}
+          />
+          <div>
+            <div css={{display: 'flex', position: 'relative'}}>
+              <div css={{flex: 1, justifyContent: 'space-between'}}>
+                <h1>{title}</h1>
+                <div>
+                  <i>{author}</i>
+                  <span css={{marginRight: 6, marginLeft: 6}}>|</span>
+                  <i>{publisher}</i>
+                </div>
+              </div>
+              <div
+                css={{
+                  right: 0,
+                  color: colors.gray80,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-around',
+                  minHeight: 100,
+                }}
+              >
+                {book.loadingBook ? null : <StatusButtons book={book} />}
               </div>
             </div>
-            <div
-              css={{
-                right: 0,
-                color: colors.gray80,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-around',
-                minHeight: 100,
-              }}
-            >
-              {book.loadingBook ? null : (
-                <StatusButtons user={user} book={book} />
-              )}
+            <div css={{marginTop: 10, minHeight: 46}}>
+              {listItem?.finishDate ? <Rating listItem={listItem} /> : null}
+              {listItem ? <ListItemTimeframe listItem={listItem} /> : null}
             </div>
+            <br />
+            <p css={{whiteSpace: 'break-spaces', display: 'block'}}>
+              {synopsis}
+            </p>
           </div>
-          <div css={{marginTop: 10, height: 46}}>
-            {listItem?.finishDate ? (
-              <Rating user={user} listItem={listItem} />
-            ) : null}
-            {listItem ? <ListItemTimeframe listItem={listItem} /> : null}
-          </div>
-          <br />
-          <p>{synopsis}</p>
         </div>
+        {!book.loadingBook && listItem ? (
+          <NotesTextarea listItem={listItem} />
+        ) : null}
       </div>
-      {!book.loadingBook && listItem ? (
-        <NotesTextarea user={user} listItem={listItem} />
-      ) : null}
-    </div>
+    </Profiler>
   )
 }
 
@@ -101,8 +102,8 @@ function ListItemTimeframe({listItem}) {
   )
 }
 
-function NotesTextarea({listItem, user}) {
-  const [mutate, {error, isError}] = useUpdateListItem(user)
+function NotesTextarea({listItem}) {
+  const [mutate, {error, isError, isLoading}] = useUpdateListItem()
   const debouncedMutate = React.useMemo(() => debounceFn(mutate, {wait: 300}), [
     mutate,
   ])
@@ -128,11 +129,12 @@ function NotesTextarea({listItem, user}) {
         </label>
         {isError ? (
           <ErrorMessage
-            error={error}
             variant="inline"
-            css={{marginLeft: 6, fontSize: '0.7em'}}
+            error={error}
+            css={{fontSize: '0.7em'}}
           />
         ) : null}
+        {isLoading ? <Spinner /> : null}
       </div>
       <Textarea
         id="notes"

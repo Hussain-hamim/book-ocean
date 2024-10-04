@@ -1,4 +1,4 @@
-# Compound Components
+# Performance
 
 ## 📝 Your Notes
 
@@ -6,155 +6,173 @@ Elaborate on your learnings here in `INSTRUCTIONS.md`
 
 ## Background
 
-Whenever you find yourself copy/pasting stuff in your codebase, you may have the
-urge to abstract that code into a reusable component. But not all reusable
-components are _actually_ reusable. Lots of the time what it turns into is a
-mess of props. I've seen "reusable" components with over 100 props! Those end up
-being enormously difficult to use and maintain. They're also riddled with
-performance problems and actual bugs.
+One of the most common performance problems web applications face is initial
+page load. As the application grows, the size of the JavaScript bundle grows as
+well. With every feature, you add more dependencies and your own code to the
+size of the JavaScript bundle you're sending to users.
 
-But if we're mindful of the kinds of abstractions we create, then we can make
-something that is truly easy to use and maintain, are bug free, and not so big
-our users pay the download penalty.
+This has adverse performance affects because it takes longer to send that data
+over the internet and it also takes more time for the browser to process that
+data (for example: to parse and run the JavaScript).
 
-Give my talk a watch for more on this concept:
-[Simply React](https://www.youtube.com/watch?v=AiJ8tRRH0f8&list=PLV5CVI1eNcJgNqzNwcs4UKrlJdhfDjshf)
+But no matter how big your application grows, it's unlikely the user needs
+_everything_ your application can do on the page at the same time. So if instead
+we split the application code and assets into logical "chunks" then we could
+load only the chunks necessary for what the user wants to do right now.
+
+This is called "_Code splitting_".
+
+📜 Here are some relevant docs from React
+
+- [Code-splitting in the React Docs](https://reactjs.org/docs/code-splitting.html)
+
+This optimization is intended to improve what's called the
+["Time to First Meaningful Paint"](https://web.dev/first-meaningful-paint/). The
+sooner users can see the content they're coming for, the better and this is a
+metric for measuring this.
 
 ## Exercise
 
 Production deploys:
 
-- [Exercise](https://exercises-08-compound-components.bookshelf.lol/exercise)
-- [Final](https://exercises-08-compound-components.bookshelf.lol/)
+- [Exercise](https://exercises-09-performance.bookshelf.lol/exercise)
+- [Final](https://exercises-09-performance.bookshelf.lol/)
 
-In this exercise, we've got a `LoginFormModal` component that's abstracted the
-modal for our login and registration forms. The component itself isn't all that
-complicated and only accepts a handful of props, but it's pretty inflexible and
-we're going to start creating more modals throughout the application so we want
-something that's a lot more flexible.
+This exercise is all about improving the time to first meaningful paint. Our app
+is pretty small as it is, so some of our optimizations might be a little
+overkill. We're already scoring 99/100 on our
+[Lighthouse](https://developers.google.com/web/tools/lighthouse) score, but in
+medium-to-large size apps, these changes will make much more significant and
+valuable impacts on the performance of your application in production.
 
-To that end, we're going to create a set of compound components for the modal,
-so users can do this:
+In fact, with an app as small as this, it's hard to get measurements indicating
+that we've improved things at all, so the optimizations we'll do in this
+exercise should really only be applied to larger apps. As always: measure before
+and after and choose the faster one!
 
-```jsx
-<Modal>
-  <ModalOpenButton>
-    <button>Open Modal</button>
-  </ModalOpenButton>
-  <ModalContents aria-label="Modal label (for screen readers)">
-    <ModalDismissButton>
-      <button>Close Modal</button>
-    </ModalDismissButton>
-    <h3>Modal title</h3>
-    <div>Some great contents of the modal</div>
-  </ModalContents>
-</Modal>
-```
+👨‍💼 We're having people close the browser before our login page finishes loading!
+We need the login page to load faster!
 
-For comparison, here's our `LoginFormModal`'s API:
+We have two parts of our app, the authenticated side, and the unauthenticated
+side. The users who are coming to the unauthenticated app are loading everything
+in the app even though they're not using it all.
 
-```jsx
-<LoginFormModal
-  onSubmit={handleSubmit}
-  modalTitle="Modal title"
-  modalLabelText="Modal label (for screen readers)"
-  submitButton={<button>Submit form</button>}
-  openButton={<button>Open Modal</button>}
-/>
-```
+So your job is to implement "Code Splitting" so we lazily load the Authenticated
+app so users don't have to pay the cost for the authenticated app until they've
+actually logged in.
 
-It's definitely more code to use than our existing `LoginFormModal`, but it
-actually is simpler and more flexible and will suit our future use cases without
-getting any more complex.
-
-For example, consider a situation where we don't want to only render a form but
-want to render whatever we like. Our `Modal` supports this, but the
-`LoginFormModal` would need to accept a new prop. Or what if we want the close
-button to appear below the contents? We'd need a special prop called
-`renderCloseBelow`. But with our `Modal`, it's obvious. You just move the
-`ModalCloseButton` component to where you want it to go.
-
-Much more flexible, and less API surface area.
-
-So your job is to implement the `Modal` compound components and use them in
-place of the `LoginFormModal` (and delete the `LoginFormModal`).
+> 💰 Remember, `React.lazy` expects the module you're importing to export a
+> React component as the default export. So you'll need to update those exports.
+> Also, due to the way we're structuring the exercises, you'll also need to
+> update the "main" module that's re-exporting things. So you'll make a change
+> to `src/authenticated-app.exercise.js` as well as `src/authenticated-app.js`!
 
 ### Files
 
-- `src/components/modal.js`
+- `src/app.js`
+- `src/authenticated-app.js`
 - `src/unauthenticated-app.js`
 
 ## Extra Credit
 
-### 1. 💯 Add `callAll`
+### 1. 💯 Prefetch the Authenticated App
 
-[Production deploy](https://exercises-08-compound-components.bookshelf.lol/extra-1)
+[Production deploy](https://exercises-09-performance.bookshelf.lol/extra-1)
 
-The `ModalOpenButton` and `ModalCloseButton` implementations set the `onClick`
-of their child button so you can open and close the modal. But what if the users
-of those components want to do something when the user clicks the button (in
-addition to opening/closing the modal) (for example, triggering analytics).
+When the user lands on the login screen, it's really likely they'll want to load
+the regular app, so go ahead and use
+[webpack magic comments](https://webpack.js.org/api/module-methods/#magic-comments)
+to prefetch the authenticated app module.
 
-Your job is to make this use case work:
-
-```jsx
-<ModalOpenButton>
-  <button onClick={() => console.log('opening the modal')}>Open Modal</button>
-</ModalOpenButton>
-```
+This will reduce the amount of time it takes to render the authenticated app
+once the user logs in because the code will be pre-loaded, but the user won't
+have to wait for that code to download before they can use the login screen.
 
 **Files:**
 
-- `src/components/modal.js`
+- `src/app.js`
 
-### 2. 💯 Create ModalContentsBase
+### 2. 💯 Memoize context
 
-[Production deploy](https://exercises-08-compound-components.bookshelf.lol/extra-2)
+[Production deploy](https://exercises-09-performance.bookshelf.lol/extra-2)
 
-So both of our current modals have a circle dismiss button and an `h3` for the
-title that they're using and most modals in our app are going to have that same
-layout. With that you might be tempted to just move that UI into the
-`ModalContents` directly, but then we'll be stuck in the future where we want to
-customize that UI (like not have a title or close button or if we want the close
-button to look or be positioned differently).
+If a context provider re-renders with a different `value` from the previous
+render, all consumers will re-render. When writing idiomatic context provider
+components which are rendered globally in your app, you can take advantage of
+[this built-in optimization](https://kentcdodds.com/blog/optimize-react-re-renders),
+and the only time the provider re-renders is when the state actually changes
+(which is when you _want_ consumers to re-render anyway).
 
-So instead, let's rename our current `ModalContents` component to
-`ModalContentsBase` and then create a _new_ `ModalContents` component that
-_uses_ `ModalContentsBase` under the hood, but also renders the circle dismiss
-button and the title.
-
-When you're done people will be able to go from this:
-
-```jsx
-<ModalContents aria-label="Registration form">
-  {circleDismissButton}
-  <h3 css={{textAlign: 'center', fontSize: '2em'}}>Register</h3>
-  <LoginForm
-    onSubmit={register}
-    submitButton={<Button variant="secondary">Register</Button>}
-  />
-</ModalContents>
-```
-
-To this:
-
-```jsx
-<ModalContents title="Register" aria-label="Registration form">
-  <LoginForm
-    onSubmit={register}
-    submitButton={<Button variant="secondary">Register</Button>}
-  />
-</ModalContents>
-```
+However, it's often a good idea to memoize the functions we expose through
+context so those functions can be passed into dependency arrays. And we'll
+memoize the context value as well.
 
 **Files:**
 
-- `src/components/modal.js`
-- `src/unauthenticated-app.js`
+- `src/context/auth-context.js`
+
+### 3. 💯 Production Monitoring
+
+[Production deploy](https://exercises-09-performance.bookshelf.lol/extra-3)
+
+We want to be able to monitor the application performance in production so we
+can be notified if there's a huge spike in performance issues. There's a small
+performance penalty cost for this so we have modify how the app is built so it
+includes the React profiling tools, but having the information is often worth
+the cost. Facebook actually will only serve the profiling-enabled build of their
+app to a subset of users and that's something that you might consider when
+adding this to your own app.
+
+Because we're using `react-scripts` (thanks to create-react-app), we can use the
+`--profile` flag to enable building for production with the profiling
+information enabled. In fact, we're already doing this, but I wanted to make
+sure you don't miss that step. For more information on this, read
+[Profile a React App for Performance](https://kentcdodds.com/blog/profile-a-react-app-for-performance).
+
+With that in place, we can now tell React where we want to start collecting
+performance information. We're going to be using React's
+[`<Profiler />`](https://react.dev/reference/react/Profiler) component to do
+this performance measuring and reporting. You'll want to send the data for the
+profile in a `POST` request to `/profile` (`client('profile', {body: data}))`).
+Note that it is not necessary to send a `token` because this is not an
+authenticated request (because we want this to happen for unauthenticated users
+too).
+
+There are lots of ways to go about doing this and you can feel free to do this
+however you like, but in my finished example, I created a component with the
+following API:
+
+```javascript
+<Profiler id="Unique Identifier" metadata={{extra: 'info for the report'}}>
+  <Components />
+  <To />
+  <Be />
+  <Profiled />
+</Profiler>
+```
+
+Then the `Profiler` will be responsible for sending the profile data that we get
+from React to the `/profile` endpoint.
+
+There are various places where this information might be useful. You can feel
+free to add it wherever you like.
+
+**Files:**
+
+- `src/components/profiler.js`
+- `src/index.js`
+- `src/components/list-item-list.js`
+- `src/screens/book.js`
+- `src/screens/discover.js`
+
+... 4. 💯 Add interaction tracing
+
+This API was removed from React, so we've deleted the video and exercise from
+this workshop. Learn more: https://github.com/facebook/react/issues/21285
 
 ## 🦉 Elaboration and Feedback
 
 After the instruction, if you want to remember what you've just learned, then
 fill out the elaboration and feedback form:
 
-https://ws.kcd.im/?ws=Build%20React%20Apps&e=08%3A%20Compound%20Components&em=
+https://ws.kcd.im/?ws=Build%20React%20Apps&e=09%3A%20Performance&em=
