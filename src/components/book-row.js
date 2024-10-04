@@ -6,7 +6,6 @@ import * as colors from 'styles/colors'
 
 function BookRow({book}) {
   const {title, author, coverImageUrl} = book
-
   const id = `book-row-book-${book.id}`
 
   return (
@@ -20,6 +19,7 @@ function BookRow({book}) {
     >
       <div
         aria-labelledby={id}
+        to={`/book/${book.id}`}
         css={{
           minHeight: 270,
           flexGrow: 2,

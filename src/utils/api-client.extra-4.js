@@ -9,8 +9,8 @@ function client(
     method: data ? 'POST' : 'GET',
     body: data ? JSON.stringify(data) : undefined,
     headers: {
-      'Content-Type': data ? 'application/json' : undefined,
       Authorization: token ? `Bearer ${token}` : undefined,
+      'Content-Type': data ? 'application/json' : undefined,
       ...customHeaders,
     },
     ...customConfig,
@@ -18,8 +18,6 @@ function client(
 
   return window.fetch(`${apiURL}/${endpoint}`, config).then(async response => {
     if (response.status === 401) {
-      console.log(response)
-
       await auth.logout()
       // refresh the page for them
       window.location.assign(window.location)
