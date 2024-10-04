@@ -34,6 +34,7 @@ function DiscoverBooksScreen() {
       css={{
         // backgroundColor: 'black',
         color: darkMode.darkMode ? 'white' : null,
+        // width: '100%',
       }}
     >
       <div>

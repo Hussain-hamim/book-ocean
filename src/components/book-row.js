@@ -26,6 +26,9 @@ function BookRow({book}) {
         alignItems: 'center',
         justifyContent: 'flex-end',
         position: 'relative',
+        // width: '100%',
+        right: '20px',
+        // paddingRight: '20px',
       }}
     >
       <Link
@@ -104,6 +107,7 @@ function BookRow({book}) {
           marginLeft: '20px',
           position: 'absolute',
           right: -20,
+
           color: colors.gray80,
           display: 'flex',
           flexDirection: 'column',

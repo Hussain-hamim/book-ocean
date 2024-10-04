@@ -54,6 +54,7 @@ function AuthenticatedApp() {
             border: 'none',
             borderRadius: '5px',
           }}
+          title="change color mode"
         >
           {darkMode.darkMode ? <FaMoon /> : <FaSun />}
         </button>
