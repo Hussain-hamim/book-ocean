@@ -9,7 +9,7 @@ import {FullPageSpinner, FullPageErrorFallback} from 'components/lib'
 import {queryCache} from 'react-query'
 import {setQueryDataForBook} from 'utils/books'
 
-async function bootstrapAppData() {
+async function getUser() {
   let user = null
 
   const token = await auth.getToken()
@@ -27,7 +27,7 @@ async function bootstrapAppData() {
   return user
 }
 
-const appDataPromise = bootstrapAppData()
+const userPromise = getUser()
 
 const AuthContext = React.createContext()
 AuthContext.displayName = 'AuthContext'
@@ -53,8 +53,8 @@ function AuthProvider(props) {
     // have to wait until the app mounts before we kick off
     // the request.
     // We're moving from "Fetch on render" to "Render WHILE you fetch"!
-    run(appDataPromise)
-  }, [run])
+    run(userPromise)
+  }, [run, userPromise])
 
   const login = React.useCallback(
     form => auth.login(form).then(user => setData(user)),
