@@ -53,6 +53,8 @@ function AuthenticatedApp() {
             marginLeft: '10px',
             border: 'none',
             borderRadius: '5px',
+            paddingBottom: '5px',
+            backgroundColor: darkMode.darkMode ? 'gray' : null,
           }}
           title="change color mode"
         >
@@ -65,7 +67,15 @@ function AuthenticatedApp() {
         >
           {user.username}
         </span>
-        <Button variant="secondary" css={{marginLeft: '10px'}} onClick={logout}>
+        <Button
+          variant="secondary"
+          css={{
+            marginLeft: '10px',
+            backgroundColor: darkMode.darkMode ? 'gray' : null,
+            color: darkMode.darkMode ? 'white' : null,
+          }}
+          onClick={logout}
+        >
           Logout
         </Button>
       </div>

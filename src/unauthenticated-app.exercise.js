@@ -7,6 +7,8 @@ import {Modal, ModalContents, ModalOpenButton} from './components/modal'
 import {Logo} from './components/logo'
 import {useAuth} from './context/auth-context'
 import {useAsync} from './utils/hooks'
+import {DarkModeContext} from 'index.exercise'
+import {FaMoon, FaSun, FaCopyright} from 'react-icons/fa'
 
 function LoginForm({onSubmit, submitButton}) {
   const {isLoading, isError, error, run} = useAsync()
@@ -61,6 +63,8 @@ function LoginForm({onSubmit, submitButton}) {
 
 function UnauthenticatedApp() {
   const {login, register} = useAuth()
+  const [darkMode, setDarkMode] = React.useContext(DarkModeContext)
+
   return (
     <div
       css={{
@@ -73,7 +77,13 @@ function UnauthenticatedApp() {
       }}
     >
       <Logo width="80" height="80" />
-      <h1>Bookshelf</h1>
+      <h1
+        css={{
+          color: darkMode.darkMode ? 'white' : 'black',
+        }}
+      >
+        Book Ocean
+      </h1>
       <div
         css={{
           display: 'grid',
@@ -103,6 +113,41 @@ function UnauthenticatedApp() {
             />
           </ModalContents>
         </Modal>
+        <button
+          onClick={mode => setDarkMode({darkMode: !darkMode.darkMode})}
+          css={{
+            // marginRight: '10px',
+            // marginLeft: '10px',
+            border: 'none',
+            borderRadius: '10px',
+            paddingBottom: '5px',
+            // width: '50px',
+            backgroundColor: 'gray',
+            position: 'absolute',
+            top: '20px',
+            right: '30px',
+            width: '50px',
+          }}
+          title="change color mode"
+        >
+          {darkMode.darkMode ? <FaMoon /> : <FaSun />}
+        </button>
+        <div
+          css={{
+            // paddingRight: '5px',
+            color: darkMode.darkMode ? 'white' : 'black',
+            position: 'absolute',
+            right: '20px',
+            bottom: '20px',
+          }}
+        >
+          <FaCopyright
+            css={{
+              paddingRight: '5px',
+            }}
+          />
+          Hussain-hamim 2024
+        </div>
       </div>
     </div>
   )
