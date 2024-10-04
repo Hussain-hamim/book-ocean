@@ -13,8 +13,10 @@ import {DiscoverBooksScreen} from './screens/discover'
 import {BookScreen} from './screens/book'
 import {NotFoundScreen} from './screens/not-found'
 import React from 'react'
-import {DarkModeContext} from 'app.exercise'
+// import {DarkModeContext} from 'app.exercise'
 import {FaMoon, FaSun} from 'react-icons/fa'
+import {DarkModeContext} from 'index.exercise'
+// import {DarkModeContext} from 'index.exercise'
 
 function ErrorFallback({error}) {
   return (
@@ -87,7 +89,11 @@ function AuthenticatedApp() {
         <div css={{position: 'relative'}}>
           <Nav />
         </div>
-        <main css={{width: '100%'}}>
+        <main
+          css={{
+            width: '100%',
+          }}
+        >
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <AppRoutes />
           </ErrorBoundary>

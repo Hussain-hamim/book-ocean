@@ -9,7 +9,8 @@ import {useBookSearch, useRefetchBookSearchQuery} from 'utils/books'
 import {BookRow} from 'components/book-row'
 import {BookListUL, Spinner, Input} from 'components/lib'
 import {Profiler} from 'components/profiler'
-import {DarkModeContext} from 'app.exercise'
+// import {DarkModeContext} from 'app.exercise'
+import {DarkModeContext} from 'index.exercise'
 
 function DiscoverBooksScreen() {
   const [query, setQuery] = React.useState('')

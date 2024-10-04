@@ -7,7 +7,9 @@ import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 import {StatusButtons} from './status-buttons'
 import {Rating} from './rating'
-import {DarkModeContext} from 'app.exercise'
+// import {DarkModeContext} from 'app.exercise'
+import {DarkModeContext} from 'index.exercise'
+
 import React from 'react'
 
 function BookRow({book}) {
