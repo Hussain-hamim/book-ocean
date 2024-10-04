@@ -59,7 +59,7 @@ function BookRow({book}) {
           css={{
             width: 140,
             [mq.small]: {
-              width: 100,
+              width: 120,
             },
           }}
         >
@@ -77,7 +77,7 @@ function BookRow({book}) {
                 css={{
                   fontSize: '1.25em',
                   margin: '0',
-                  // color: colors.indigo,
+                  color: colors.indigo,
                 }}
               >
                 {title}
