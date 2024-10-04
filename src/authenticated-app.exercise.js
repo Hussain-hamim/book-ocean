@@ -12,6 +12,9 @@ import {FinishedScreen} from './screens/finished'
 import {DiscoverBooksScreen} from './screens/discover'
 import {BookScreen} from './screens/book'
 import {NotFoundScreen} from './screens/not-found'
+import React from 'react'
+import {DarkModeContext} from 'app.exercise'
+import {FaMoon, FaSun} from 'react-icons/fa'
 
 function ErrorFallback({error}) {
   return (
@@ -30,6 +33,7 @@ function ErrorFallback({error}) {
 
 function AuthenticatedApp() {
   const {user, logout} = useAuth()
+  const [darkMode, setDarkMode] = React.useContext(DarkModeContext)
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
       <div
@@ -41,6 +45,17 @@ function AuthenticatedApp() {
           right: '10px',
         }}
       >
+        <button
+          onClick={mode => setDarkMode({darkMode: !darkMode.darkMode})}
+          css={{
+            marginRight: '10px',
+            marginLeft: '10px',
+            border: 'none',
+            borderRadius: '5px',
+          }}
+        >
+          {darkMode.darkMode ? <FaMoon /> : <FaSun />}
+        </button>
         {user.username}
         <Button variant="secondary" css={{marginLeft: '10px'}} onClick={logout}>
           Logout
@@ -48,6 +63,7 @@ function AuthenticatedApp() {
       </div>
       <div
         css={{
+          backgroundColor: darkMode.darkMode ? '#212529' : 'white',
           margin: '0 auto',
           padding: '4em 2em',
           maxWidth: '840px',
@@ -77,26 +93,33 @@ function AuthenticatedApp() {
 
 function NavLink(props) {
   const match = useMatch(props.to)
+  const [darkMode] = React.useContext(DarkModeContext)
+
   return (
     <RouterLink
       css={[
         {
+          // color: colors.text,
+          color: darkMode.darkMode ? 'white' : colors.text,
+
           display: 'block',
           padding: '8px 15px 8px 10px',
           margin: '5px 0',
           width: '100%',
           height: '100%',
-          color: colors.text,
           borderRadius: '2px',
           borderLeft: '5px solid transparent',
           ':hover': {
             color: colors.indigo,
+            // color: darkMode.darkMode ? 'white' : null,
+
             textDecoration: 'none',
             background: colors.gray10,
           },
         },
         match
           ? {
+              color: darkMode.darkMode ? 'black' : null,
               borderLeft: `5px solid ${colors.indigo}`,
               background: colors.gray10,
               ':hover': {

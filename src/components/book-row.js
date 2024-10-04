@@ -7,10 +7,13 @@ import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 import {StatusButtons} from './status-buttons'
 import {Rating} from './rating'
+import {DarkModeContext} from 'app.exercise'
+import React from 'react'
 
 function BookRow({book}) {
   const {title, author, coverImageUrl} = book
   const listItem = useListItem(book.id)
+  const [darkMode] = React.useContext(DarkModeContext)
 
   const id = `book-row-book-${book.id}`
 
@@ -33,13 +36,17 @@ function BookRow({book}) {
           gridTemplateColumns: '140px 1fr',
           gridGap: 20,
           border: `1px solid ${colors.gray20}`,
-          color: colors.text,
+          // color: colors.text,
           padding: '1.25em',
           borderRadius: '3px',
+          backgroundColor: darkMode.darkMode ? '#212529' : 'white',
+          color: darkMode.darkMode ? 'white' : '#212529',
+
           ':hover,:focus': {
             textDecoration: 'none',
             boxShadow: '0 5px 15px -5px rgba(0,0,0,.08)',
-            color: 'inherit',
+            // color: 'inherit',
+            color: darkMode.darkMode ? 'white' : 'black',
           },
         }}
       >
@@ -54,7 +61,7 @@ function BookRow({book}) {
           <img
             src={coverImageUrl}
             alt={`${title} book cover`}
-            css={{maxHeight: '100%', width: '100%'}}
+            css={{maxHeight: '100%', width: '100%', borderRadius: '4px'}}
           />
         </div>
         <div css={{flex: 1}}>
@@ -65,7 +72,7 @@ function BookRow({book}) {
                 css={{
                   fontSize: '1.25em',
                   margin: '0',
-                  color: colors.indigo,
+                  // color: colors.indigo,
                 }}
               >
                 {title}

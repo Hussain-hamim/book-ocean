@@ -9,12 +9,14 @@ import {useBookSearch, useRefetchBookSearchQuery} from 'utils/books'
 import {BookRow} from 'components/book-row'
 import {BookListUL, Spinner, Input} from 'components/lib'
 import {Profiler} from 'components/profiler'
+import {DarkModeContext} from 'app.exercise'
 
 function DiscoverBooksScreen() {
   const [query, setQuery] = React.useState('')
   const [queried, setQueried] = React.useState()
   const {books, error, isLoading, isError, isSuccess} = useBookSearch(query)
   const refetchBookSearchQuery = useRefetchBookSearchQuery()
+  const [darkMode] = React.useContext(DarkModeContext)
 
   React.useEffect(() => {
     return () => refetchBookSearchQuery()
@@ -27,7 +29,12 @@ function DiscoverBooksScreen() {
   }
 
   return (
-    <div>
+    <div
+      css={{
+        // backgroundColor: 'black',
+        color: darkMode.darkMode ? 'white' : null,
+      }}
+    >
       <div>
         <form onSubmit={handleSearchClick}>
           <Input

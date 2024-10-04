@@ -11,14 +11,27 @@ const AuthenticatedApp = React.lazy(() =>
 const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 // const UnauthenticatedApp = React.lazy(() => import('./unauthenticated-app'))
 
+const DarkModeContext = React.createContext()
+
 function App() {
+  const [darkMode, setDarkMode] = React.useState({darkMode: false})
   const {user} = useAuth()
-  // 🐨 wrap this in a <React.Suspense /> component
+
+  console.log(darkMode)
+
   return (
-    <React.Suspense fallback={<FullPageSpinner />}>
-      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
-    </React.Suspense>
+    <span style={{backgroundColor: darkMode.darkMode ? 'gray' : 'white'}}>
+      <React.Suspense fallback={<FullPageSpinner />}>
+        {user ? (
+          <DarkModeContext.Provider value={[darkMode, setDarkMode]}>
+            <AuthenticatedApp />
+          </DarkModeContext.Provider>
+        ) : (
+          <UnauthenticatedApp />
+        )}
+      </React.Suspense>
+    </span>
   )
 }
 
-export {App}
+export {App, DarkModeContext}

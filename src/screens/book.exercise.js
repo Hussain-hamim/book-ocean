@@ -15,11 +15,13 @@ import {Spinner, Textarea, ErrorMessage} from 'components/lib'
 import {Rating} from 'components/rating'
 import {Profiler} from 'components/profiler'
 import {StatusButtons} from 'components/status-buttons'
+import {DarkModeContext} from 'app.exercise'
 
 function BookScreen() {
   const {bookId} = useParams()
   const book = useBook(bookId)
   const listItem = useListItem(bookId)
+  const [darkMode] = React.useContext(DarkModeContext)
 
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
@@ -28,6 +30,7 @@ function BookScreen() {
       <div>
         <div
           css={{
+            color: darkMode.darkMode ? 'white' : 'black',
             display: 'grid',
             gridTemplateColumns: '1fr 2fr',
             gridGap: '2em',
@@ -104,6 +107,8 @@ function ListItemTimeframe({listItem}) {
 
 function NotesTextarea({listItem}) {
   const [mutate, {error, isError, isLoading}] = useUpdateListItem()
+  const [darkMode] = React.useContext(DarkModeContext)
+
   const debouncedMutate = React.useMemo(
     () => debounceFn(mutate, {wait: 300}),
     [mutate],
@@ -115,7 +120,11 @@ function NotesTextarea({listItem}) {
 
   return (
     <React.Fragment>
-      <div>
+      <div
+        css={{
+          color: darkMode.darkMode ? 'white' : 'black',
+        }}
+      >
         <label
           htmlFor="notes"
           css={{
@@ -138,10 +147,16 @@ function NotesTextarea({listItem}) {
         {isLoading ? <Spinner /> : null}
       </div>
       <Textarea
+        css={{
+          color: darkMode.darkMode ? 'white' : 'black',
+          backgroundColor: darkMode.darkMode ? '#212525' : null,
+          width: '100%',
+          minHeight: 300,
+        }}
         id="notes"
         defaultValue={listItem.notes}
         onChange={handleNotesChange}
-        css={{width: '100%', minHeight: 300}}
+        // css={{width: '100%', minHeight: 300}}
       />
     </React.Fragment>
   )
