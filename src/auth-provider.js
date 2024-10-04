@@ -48,4 +48,4 @@ async function client(endpoint, data) {
   })
 }
 
-export {getToken, login, register, logout, localStorageKey}
+export {getToken, localStorageKey, login, logout, register}

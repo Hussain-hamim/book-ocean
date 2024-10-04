@@ -3,13 +3,18 @@ import {jsx} from '@emotion/core'
 
 import * as React from 'react'
 import * as auth from 'auth-provider'
+// React Router DOM exposes a context provider that all the React Router
+// components use to implicitly access the router data. We need to wrap our
+// AuthenticatedApp in the router
+// 🐨 import the BrowserRouter from 'react-router-dom'
+import {BrowserRouter} from 'react-router-dom'
 
+import {FullPageSpinner} from './components/lib'
+import * as colors from './styles/colors'
+import {client} from './utils/api-client'
+import {useAsync} from './utils/hooks'
 import {AuthenticatedApp} from './authenticated-app'
 import {UnauthenticatedApp} from './unauthenticated-app'
-import {client} from 'utils/api-client.exercise'
-import {FullPageSpinner} from 'components/lib'
-import {useAsync} from 'utils/hooks'
-import * as colors from './styles/colors'
 
 async function getUser() {
   let user = null
@@ -18,8 +23,8 @@ async function getUser() {
   if (token) {
     const data = await client('me', {token})
     user = data.user
-    console.log(data)
   }
+
   return user
 }
 
@@ -27,10 +32,10 @@ function App() {
   const {
     data: user,
     error,
-    isIdle,
     isLoading,
-    isSuccess,
+    isIdle,
     isError,
+    isSuccess,
     run,
     setData,
   } = useAsync()
@@ -39,10 +44,8 @@ function App() {
     run(getUser())
   }, [run])
 
-  const login = form => auth.login(form).then(u => setData(u))
-
-  const register = form => auth.register(form).then(u => setData(u))
-
+  const login = form => auth.login(form).then(user => setData(user))
+  const register = form => auth.register(form).then(user => setData(user))
   const logout = () => {
     auth.logout()
     setData(null)
@@ -71,17 +74,16 @@ function App() {
   }
 
   if (isSuccess) {
+    const props = {user, login, register, logout}
+    // 🐨 wrap the BrowserRouter around the AuthenticatedApp
     return user ? (
-      <AuthenticatedApp user={user} logout={logout} />
+      <BrowserRouter>
+        <AuthenticatedApp {...props} />
+      </BrowserRouter>
     ) : (
-      <UnauthenticatedApp login={login} register={register} />
+      <UnauthenticatedApp {...props} />
     )
   }
 }
 
 export {App}
-
-/*
-eslint
-  no-unused-vars: "off",
-*/

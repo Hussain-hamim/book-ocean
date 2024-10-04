@@ -1,4 +1,4 @@
-# Authentication
+# Routing
 
 ## 📝 Your Notes
 
@@ -6,255 +6,268 @@ Elaborate on your learnings here in `INSTRUCTIONS.md`
 
 ## Background
 
-### Authenticated HTTP requests
+The URL is arguably one of the best features of the web. The ability for one
+user to share a link to another user who can use it to go directly to a piece of
+content on a given website is fantastic. Other platforms don't really have this.
 
-Applications without user authentication cannot reliably store and present data
-tied to a specific user. And users expect the ability to save data, close the
-app, and return to the app and interact with the same data they created. To do
-this securely (in a way that doesn't allow anyone to access anyone else's data),
-you need to support authentication. The most common approach to this is a
-username/password pair.
+The de-facto standard library for routing React applications is
+[React Router](https://reactrouter.com). It's terrific.
 
-However, the user doesn't want to submit their password every time they need to
-make a request for data. They want to be able to log into the application and
-then the application can continuously authenticate requests for them
-automatically. That said, we don't want to store the user's password and send
-that with every request. A common solution to this problem is to use a special
-limited use "token" which represents the user's current session. That way the
-token can be invalidated (in the case that it's lost or stolen) and the user
-doesn't have to change their password. They simply re-authenticate and they can
-get a fresh token.
+The idea behind routing on the web is you have some API that informs you of
+changes to the URL, then you react (no pun intended) to those changes by
+rendering the correct user interface based on that URL route. In addition, you
+can change the URL when the user performs an action (like clicking a link or
+submitting a form). This all happens client-side and does not reload the
+browser.
 
-So, every request the client makes must include this token to make authenticated
-requests. This is one reason it's so nice to have a small wrapper around
-`window.fetch`: so you can automatically include this token in every request
-that's made. A common way to attach the token is to use a special request header
-called "Authorization".
-
-Here's an example of how to make an authenticated request:
+Here's a quick demo of a few of the features you'll need to know about for this
+exercise:
 
 ```javascript
-window.fetch('http://example.com/pets', {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-})
-```
+import * as React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useParams,
+  Link,
+} from 'react-router-dom'
 
-That token can really be anything that uniquely identifies the user, but a
-common standard is to use a JSON Web Token (JWT). 📜 https://jwt.io
-
-Authentication and user identity management is a difficult problem, so it's
-recommended to use a service to handle this for you. Most services will give you
-a mechanism for retrieving a token when the user opens your application and you
-can use that token to make authenticated requests to your backend. Some services
-you might consider investigating are [Auth0](https://auth0.com/),
-[Netlify Identity](https://docs.netlify.com/visitor-access/identity/#enable-identity-in-the-ui),
-and [Firebase Authentication](https://firebase.google.com/products/auth).
-
-Regardless of what service provider you use (or if you build your own), the
-things you'll learn in this exercise are the same:
-
-1. Call some API to retrieve a token
-2. If there's a token, then send it along with the requests you make
-
-```javascript
-const token = await authProvider.getToken()
-const headers = {
-  Authorization: token ? `Bearer ${token}` : undefined,
+function Home() {
+  return <h2>Home</h2>
 }
-window.fetch('http://example.com/pets', {headers})
+
+function About() {
+  return <h2>About</h2>
+}
+
+function Dog() {
+  const params = useParams()
+  const {dogId} = params
+  return <img src={`/img/dogs/${dogId}`} />
+}
+
+function Nav() {
+  return (
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+      <Link to="/dog/123">My Favorite Dog</Link>
+    </nav>
+  )
+}
+
+function YouLost() {
+  return <div>You lost?</div>
+}
+
+function App() {
+  return (
+    <div>
+      <h1>Welcome</h1>
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/dog/:dogId" element={<Dog />} />
+        <Route path="*" element={<YouLost />} />
+      </Routes>
+    </div>
+  )
+}
+
+function AppWithRouter() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  )
+}
+
+ReactDOM.render(<AppWithRouter />, document.getElementById('app'))
 ```
 
-### Auth in React
+That should be enough to get you going on this exercise.
 
-In a React application you manage user authenticated state the same way you
-manage any state: `useState` + `useEffect` (for making the request). When the
-user provides a username and password, you make a request and if the request is
-successful, you can then use that token to make additional authenticated
-requests. Often, in addition to the token, the server will also respond with the
-user's information which you can store in state and use it to display the user's
-data.
-
-The easiest way to manage displaying the right content to the user based on
-whether they've logged in, is to split your app into two parts: Authenticated,
-and Unauthenticated. Then you choose which to render based on whether you have
-the user's information.
-
-And when the app loads in the first place, you'll call your auth provider's API
-to retrieve a token if the user is already logged in. If they are, then you can
-show a loading screen while you request the user's data before rendering
-anything else. If they aren't, then you know you can render the login screen
-right away.
-
-📜 Learn more about this:
-https://kentcdodds.com/blog/authentication-in-react-applications
+As a fun exercise in routing on the web, you can read this blog post
+demonstrating how you might build your own React Router (version 4):
+https://ui.dev/build-your-own-react-router/
 
 ## Exercise
 
 Production deploys:
 
-- [Exercise](https://exercises-04-authentication.bookshelf.lol/exercise)
-- [Final](https://exercises-04-authentication.bookshelf.lol/)
+- [Exercise](https://exercises-05-routing.bookshelf.lol/exercise)
+- [Final](https://exercises-05-routing.bookshelf.lol/)
 
-👨‍💼 Our users are excited about the demo, but they really want to start making
-their own reading lists out of those books. Our backend engineers have been
-working around the clock to get this authentication stuff working for you.
+👨‍💼 Users want to be able to click on the book in the search results and be taken
+to a special page for that book. We want the URL to be `/book/:bookId`. Oh, and
+if the user lands on a page that we don't have a route for, then we should show
+them a nice message and a link to take them back home.
 
-We're using a service called "Auth Provider" (yes, a very clever name, it's a
-made-up thing, but should give you a good idea of how to use any typical
-authentication provider which is the point).
+And we want to have a nav bar on the left. There's really only one link we'll
+have in there right now, but we'll put more in there soon.
 
-Here's what you need to know about "Auth Provider":
+Here are the URLs we should support:
 
-- You import it like this: `import * as auth from 'auth-provider'`
-- Here are the exports you'll need (they're all `async`):
-  - `getToken()` - resolves to the token if it exists
-  - `login({username, password})` - resolves to the user if successful
-  - `register({username, password})` - resolves to the user if successful
-  - `logout` - logs the user out
+```
+/discover       ->     Discover books screen
+/book/:bookId   ->     Book screen
+*               ->     Helpful "not found" screen
+```
 
-To make an authenticated request, you'll need to get the token, and attach an
-`Authorization` header to the request set to: `Bearer {token}`
-
-As for the UI, when the user registers or logs in, they should be shown the
-discover page. They should also have a button to logout which will clear the
-user's token from the browser and render the home page again.
+💰 tip: there's no need to render the router around the Unauthenticated App,
+just the Authenticated one.
 
 ### Files
 
 - `src/app.js`
+- `src/authenticated-app.js`
+- `src/components/book-row.js`
+- `src/screens/not-found.js`
+- `src/screens/book.js`
 
 ## Extra Credit
 
-### 1. 💯 Load the user's data on page load
+### 1. 💯 handle URL redirects
 
-[Production deploy](https://exercises-04-authentication.bookshelf.lol/extra-1)
+[Production deploy](https://exercises-05-routing.bookshelf.lol/extra-1)
 
-👨‍💼 People are complaining that when they refresh the app shows them the login
-screen again. Whoops! Looks like we'll need to check if there's a token in
-localStorage and make a request to get the user's info if there is.
+We don't have anything to show at the home route `/`. We should redirect the
+user from that route to `/discover` automatically. Often, developers will use
+their client-side router to redirect users, but it's not possible for the
+browser and search engines to get the proper status codes for redirect (301
+or 302) so that's not optimal. The server should be configured to handle those.
 
-Luckily, the backend devs gave us an API we can use to get the user's
-information by providing the token:
+There are three environments where we have a server serving our content:
+
+1. Locally during development
+2. Locally when running the built code via the `npm run serve` script which uses
+   https://npm.im/serve
+3. In production with Netlify
+
+So for this extra credit you need to configure each of these to redirect `/` to
+`/discover`.
+
+**Local Development**
+
+We need to add redirect functionality to the webpack server that `react-scripts`
+is running for us. We can do that with the `./src/setupProxy.js` file. In that
+file we export a function that accepts an
+[express `app`](https://expressjs.com/) and attaches a `get` to handle requests
+sent to a URL matching this regex: `/\/$/` and redirects to `/discover`.
 
 ```javascript
-const token = await auth.getToken()
-if (token) {
-  // we're logged in! Let's go get the user's data:
-  client('me', {token}).then(data => {
-    console.log(data.user)
-  })
-} else {
-  // we're not logged in. Show the login screen
+function proxy(app) {
+  // add the redirect handler here
+}
+
+module.exports = proxy
+```
+
+📜 Here are some docs that might be helpful to you:
+
+- http://expressjs.com/en/4x/api.html#app.get.method
+- http://expressjs.com/en/4x/api.html#res.redirect
+
+**With serve**
+
+The `serve` module can be configured with a `serve.json` file in the directory
+you serve. Open `./public/serve.json` and see if you can figure out how to get
+that to redirect properly.
+
+To know whether it worked, you'll need to run:
+
+```
+npm run build
+npm run serve
+```
+
+Then open `http://localhost:8811`. It worked if your redirected to
+`http://localhost:8811/discover`.
+
+📜 Here are the docs you'll probably want:
+
+- https://github.com/zeit/serve-handler/tree/ce35fcd4e1c67356348f4735eed88fb084af9b43#redirects-array
+
+**In production**
+
+There are a few ways to configure Netlify to do redirects. We'll use the
+`_redirects` file. Open `./public/_redirects` and add support for redirecting
+`/` to `/discover`.
+
+There's no easy way to test this works, so just compare your solution to the
+final file and take my word for it that it works. Or, if you really want to
+check it out, you can run `npm run build` and then drag and drop the `build`
+directory here: https://app.netlify.com/drop
+
+📜 Here's the docs for Netlify's `_redirects` file:
+
+- https://docs.netlify.com/routing/redirects
+
+> Hint: you need to use the "!" force feature for this.
+
+For more on why we prefer server-side redirects over client-side, read
+[Stop using client-side route redirects](https://kentcdodds.com/blog/stop-using-client-side-route-redirects).
+
+**Files:**
+
+- `src/setupProxy.js`
+- `public/serve.json`
+- `public/_redirects`
+
+### 2. 💯 add `useMatch` to highlight the active nav item
+
+[Production deploy](https://exercises-05-routing.bookshelf.lol/extra-2)
+
+This isn't quite as useful right now, but when we've got several other links in
+the nav, it will be helpful to orient users if we have some indication as to
+which link the user is currently viewing. Our designer has given us this CSS you
+can use:
+
+```javascript
+{
+  borderLeft: `5px solid ${colors.indigo}`,
+  background: colors.gray10,
+  ':hover': {
+    background: colors.gray20,
+  },
 }
 ```
 
-Add this capability to `src/app.js` (in a `React.useEffect()`) so users don't
-have to re-enter their username and password if the Auth Provider has the token
-already.
-
-You'll also need to add the ability to accept the `token` option in the client
-and set that in the `Authorization` header (remember, it should be set to:
-`Bearer ${token}`)
-
-**Files:**
-
-- `src/app.js`
-- `src/utils/api-client.js`
-
-### 2. 💯 Use `useAsync`
-
-[Production deploy](https://exercises-04-authentication.bookshelf.lol/extra-2)
-
-Your co-worker came over 🧝‍♀️ because she noticed the app renders the login screen
-for a bit while it's requesting the user's information. She then politely
-reminded you that you could get loading state and everything for free by using
-her `useAsync` hook. Doh! Let's update `./src/app.js` to use `useAsync` and
-solve this loading state issue.
-
-She mentions you'll need to know that you can set the data directly:
+You can determine whether the URL matches a given path via the `useMatch` hook:
 
 ```javascript
-const {data, error, isIdle, isLoading, isSuccess, isError, run, setData} =
-  useAsync()
-
-const doSomething = () => somethingAsync().then(data => setData(data))
+const matches = useMatch('/some-path')
 ```
 
-You'll use this for the `login` and `register`.
+From there, you can conditionally apply the styles.
 
-When in `isLoading` or `isIdle` state, you can render the `FullPageSpinner` from
-`components/lib`. If you end up in `isError` state then you can render this:
+💰 Tip: the Link component in NavLink already has a CSS prop on it. The easiest
+way to add these additional styles is by passing an `array` to the css prop like
+so:
 
 ```javascript
 <div
-  css={{
-    color: colors.danger,
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }}
->
-  <p>Uh oh... There's a problem. Try refreshing the app.</p>
-  <pre>{error.message}</pre>
-</div>
+  css={[
+    {
+      /* styles 1 */
+    },
+    {
+      /* styles 2 */
+    },
+  ]}
+/>
 ```
 
 **Files:**
 
-- `src/app.js`
-
-### 3. 💯 automatically logout on 401
-
-[Production deploy](https://exercises-04-authentication.bookshelf.lol/extra-3)
-
-If the user's token expires or the user does something they're not supposed to,
-the backend can send a 401 request. If that happens, then we'll want to log the
-user out and refresh the page automatically so all data is removed from the
-page.
-
-Call `auth.logout()` to delete the user's token from the Auth Provider and call
-`window.location.assign(window.location)` to reload the page for them.
-
-**Files:**
-
-- `src/utils/api-client.js`
-
-### 4. 💯 Support posting data
-
-[Production deploy](https://exercises-04-authentication.bookshelf.lol/extra-4)
-
-It won't be long before we need to actually start sending data along with our
-requests, so let's enhance the `client` to support that use case as well.
-
-Here's how we should be able to use the `client` when this is all done:
-
-```javascript
-client('http://example.com/pets', {
-  token: 'THE_USER_TOKEN',
-  data: {name: 'Fluffy', type: 'cat'},
-})
-
-// results in fetch getting called with:
-// url: http://example.com/pets
-// config:
-//  - method: 'POST'
-//  - body: '{"name": "Fluffy", "type": "cat"}'
-//  - headers:
-//    - 'Content-Type': 'application/json'
-//    - Authorization: 'Bearer THE_USER_TOKEN'
-```
-
-**Files:**
-
-- `src/utils/api-client.js`
+- `src/authenticated-app.js`
 
 ## 🦉 Elaboration and Feedback
 
 After the instruction, if you want to remember what you've just learned, then
 fill out the elaboration and feedback form:
 
-https://ws.kcd.im/?ws=Build%20React%20Apps&e=04%3A%20Authentication&em=
+https://ws.kcd.im/?ws=Build%20React%20Apps&e=05%3A%20Routing&em=
