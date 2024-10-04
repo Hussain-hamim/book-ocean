@@ -1,7 +1,10 @@
+// 🐨 get the queryCache from 'react-query'
+import {queryCache} from 'react-query'
+
 import * as auth from 'auth-provider'
 const apiURL = process.env.REACT_APP_API_URL
 
-function client(
+async function client(
   endpoint,
   {data, token, headers: customHeaders, ...customConfig} = {},
 ) {
@@ -9,8 +12,8 @@ function client(
     method: data ? 'POST' : 'GET',
     body: data ? JSON.stringify(data) : undefined,
     headers: {
-      'Content-Type': data ? 'application/json' : undefined,
       Authorization: token ? `Bearer ${token}` : undefined,
+      'Content-Type': data ? 'application/json' : undefined,
       ...customHeaders,
     },
     ...customConfig,
@@ -18,8 +21,8 @@ function client(
 
   return window.fetch(`${apiURL}/${endpoint}`, config).then(async response => {
     if (response.status === 401) {
-      console.log(response)
-
+      // 🐨 call queryCache.clear() to clear all user data from react-query
+      queryCache.clear()
       await auth.logout()
       // refresh the page for them
       window.location.assign(window.location)

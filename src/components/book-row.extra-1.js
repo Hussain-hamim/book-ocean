@@ -2,13 +2,11 @@
 import {jsx} from '@emotion/core'
 
 import {Link} from 'react-router-dom'
+import {useListItem} from 'utils/list-items'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 import {StatusButtons} from './status-buttons'
 import {Rating} from './rating'
-import {useQuery} from 'react-query'
-import {client} from 'utils/api-client'
-import {useListItem} from 'utils/list-items'
 
 function BookRow({user, book}) {
   const {title, author, coverImageUrl} = book

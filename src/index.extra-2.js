@@ -1,76 +1,31 @@
-import '@reach/dialog/styles.css'
+import {loadDevTools} from './dev-tools/load'
+import './bootstrap'
 import * as React from 'react'
 import {createRoot} from 'react-dom/client'
-import {Dialog} from '@reach/dialog'
-import {Logo} from './components/logo'
+import {ReactQueryConfigProvider} from 'react-query'
+import {App} from './app'
 
-function LoginForm({onSubmit, buttonText}) {
-  function handleSubmit(event) {
-    event.preventDefault()
-    const {username, password} = event.target.elements
-
-    onSubmit({
-      username: username.value,
-      password: password.value,
-    })
-  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input id="username" />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" type="password" />
-      </div>
-      <div>
-        <button type="submit">{buttonText}</button>
-      </div>
-    </form>
-  )
+const queryConfig = {
+  queries: {
+    useErrorBoundary: true,
+    refetchOnWindowFocus: false,
+    retry(failureCount, error) {
+      if (error.status === 404) return false
+      else if (failureCount < 2) return true
+      else return false
+    },
+  },
 }
 
-function App() {
-  const [openModal, setOpenModal] = React.useState('none')
-
-  function login(formData) {
-    console.log('login', formData)
-  }
-
-  function register(formData) {
-    console.log('register', formData)
-  }
-
-  return (
-    <div>
-      <Logo width="80" height="80" />
-      <h1>Bookshelf</h1>
-      <div>
-        <button onClick={() => setOpenModal('login')}>Login</button>
-      </div>
-      <div>
-        <button onClick={() => setOpenModal('register')}>Register</button>
-      </div>
-      <Dialog aria-label="Login form" isOpen={openModal === 'login'}>
-        <div>
-          <button onClick={() => setOpenModal('none')}>Close</button>
-        </div>
-        <h3>Login</h3>
-        <LoginForm onSubmit={login} buttonText="Login" />
-      </Dialog>
-      <Dialog aria-label="Registration form" isOpen={openModal === 'register'}>
-        <div>
-          <button onClick={() => setOpenModal('none')}>Close</button>
-        </div>
-        <h3>Register</h3>
-        <LoginForm onSubmit={register} buttonText="Register" />
-      </Dialog>
-    </div>
+// ignore the rootRef in this file. I'm just doing it here to make
+// the tests I write to check your work easier.
+export const rootRef = {}
+loadDevTools(() => {
+  const root = createRoot(document.getElementById('root'))
+  root.render(
+    <ReactQueryConfigProvider config={queryConfig}>
+      <App />
+    </ReactQueryConfigProvider>,
   )
-}
-
-const root = createRoot(document.getElementById('root'))
-root.render(<App />)
-export {root}
+  rootRef.current = root
+})
