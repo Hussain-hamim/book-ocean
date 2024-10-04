@@ -1,9 +1,19 @@
-// no final
+import {loadDevTools} from './dev-tools/load'
+import './bootstrap'
+import * as React from 'react'
+import {createRoot} from 'react-dom/client'
+import {App} from './app'
+import {AppProviders} from './context'
 
-export * from './index.exercise'
-
-// 💯 create an `AuthProvider` component
-// export * from './index.extra-2'
-
-// 💯 colocate global providers
-// export * from './index.extra-3'
+// ignore the rootRef in this file. I'm just doing it here to make
+// the tests I write to check your work easier.
+export const rootRef = {}
+loadDevTools(() => {
+  const root = createRoot(document.getElementById('root'))
+  root.render(
+    <AppProviders>
+      <App />
+    </AppProviders>,
+  )
+  rootRef.current = root
+})

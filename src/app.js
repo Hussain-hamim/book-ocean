@@ -1,9 +1,11 @@
-// export * from './app.final'
+import * as React from 'react'
+import {useAuth} from './context/auth-context'
+import {AuthenticatedApp} from './authenticated-app'
+import {UnauthenticatedApp} from './unauthenticated-app'
 
-export * from './app.exercise'
+function App() {
+  const {user} = useAuth()
+  return user ? <AuthenticatedApp /> : <UnauthenticatedApp />
+}
 
-// 💯 create an `AuthProvider` component
-// export * from './app.extra-2'
-
-// 💯 colocate global providers
-// export * from './app.extra-3'
+export {App}

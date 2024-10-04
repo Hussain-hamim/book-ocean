@@ -2,10 +2,28 @@
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
-import {useAuth} from './context/auth-context'
-import {Input, Button, Spinner, FormGroup, ErrorMessage} from './components/lib'
-import {Modal, ModalContents, ModalOpenButton} from './components/modal'
+import VisuallyHidden from '@reach/visually-hidden'
+import {
+  Input,
+  CircleButton,
+  Button,
+  Spinner,
+  FormGroup,
+  ErrorMessage,
+  // 💣 when you're all done, you won't need this Dialog anymore
+  // you can remove this now or later when you've finished
+  // Dialog,
+} from './components/lib'
+// 🐨 import all the Modal compound components you created in ./components/modal
+import {
+  Modal,
+  ModalDismissButton,
+  ModalOpenButton,
+  ModalContents,
+} from './components/modal'
+
 import {Logo} from './components/logo'
+import {useAuth} from './context/auth-context'
 import {useAsync} from './utils/hooks'
 
 function LoginForm({onSubmit, submitButton}) {
@@ -59,6 +77,40 @@ function LoginForm({onSubmit, submitButton}) {
   )
 }
 
+// // 💣 when you're all done, you'll be able to completely delete this
+// function LoginFormModal({
+//   onSubmit,
+//   modalTitleText,
+//   modalLabelText,
+//   submitButton,
+//   openButton,
+// }) {
+//   const [isOpen, setIsOpen] = React.useState(false)
+
+//   return (
+//     <React.Fragment>
+//       {React.cloneElement(openButton, {onClick: () => setIsOpen(true)})}
+//       <Dialog
+//         aria-label={modalLabelText}
+//         isOpen={isOpen}
+//         onDismiss={() => setIsOpen(false)}
+//       >
+//         <div css={{display: 'flex', justifyContent: 'flex-end'}}>
+//           {/* 💰 here's what you should put in your <ModalDismissButton> */}
+//           <ModalDismissButton>
+//             <CircleButton onClick={() => setIsOpen(false)}>
+//               <VisuallyHidden>Close</VisuallyHidden>
+//               <span aria-hidden>×</span>
+//             </CircleButton>
+//           </ModalDismissButton>
+//         </div>
+//         <h3 css={{textAlign: 'center', fontSize: '2em'}}>{modalTitleText}</h3>
+//         <LoginForm onSubmit={onSubmit} submitButton={submitButton} />
+//       </Dialog>
+//     </React.Fragment>
+//   )
+// }
+
 function UnauthenticatedApp() {
   const {login, register} = useAuth()
   return (
@@ -81,28 +133,55 @@ function UnauthenticatedApp() {
           gridGap: '0.75rem',
         }}
       >
+        {/* 🐨 replace both of these with the Modal compound components */}
+        {/*
+          🦉 when you're done, it'll look a lot more complicated than
+             it did when you started, but the extra credits will help clean
+             things up a bit.
+        */}
         <Modal>
           <ModalOpenButton>
-            <Button variant="primary">Login</Button>
+            <Button onClick={() => console.log('salaam')} variant="primary">
+              Login
+            </Button>
           </ModalOpenButton>
-          <ModalContents aria-label="Login form" title="Login">
+
+          <ModalContents aria-label="login form" title="Login">
             <LoginForm
               onSubmit={login}
               submitButton={<Button variant="primary">Login</Button>}
             />
           </ModalContents>
         </Modal>
+
         <Modal>
           <ModalOpenButton>
             <Button variant="secondary">Register</Button>
           </ModalOpenButton>
+
           <ModalContents aria-label="Registration form" title="Register">
             <LoginForm
-              onSubmit={register}
-              submitButton={<Button variant="secondary">Register</Button>}
+              onSubmit={login}
+              submitButton={<Button variant="primary">Register</Button>}
             />
           </ModalContents>
         </Modal>
+
+        {/* <LoginFormModal
+          onSubmit={login}
+          modalTitleText="Login"
+          modalLabelText="Login form"
+          submitButton={<Button variant="primary">Login</Button>}
+          openButton={<Button variant="primary">Login</Button>}
+        />
+        <LoginFormModal
+          onSubmit={register}
+          modalTitleText="Register"
+          modalLabelText="Registration form"
+          submitButton={<Button variant="secondary">Register</Button>}
+          openButton={<Button variant="secondary">Register</Button>}
+        />
+         */}
       </div>
     </div>
   )
