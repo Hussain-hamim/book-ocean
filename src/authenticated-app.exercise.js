@@ -43,6 +43,10 @@ function AuthenticatedApp() {
           justifyContent: 'center',
           alignItems: 'center',
           marginTop: '10px',
+          [mq.small]: {
+            justifyContent: 'start',
+            marginLeft: '15px',
+          },
         }}
       >
         <h3>Book Ocean</h3>
