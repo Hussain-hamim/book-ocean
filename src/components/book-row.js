@@ -35,11 +35,12 @@ function BookRow({book}) {
         aria-labelledby={id}
         to={`/book/${book.id}`}
         css={{
-          minHeight: 270,
-          flexGrow: 2,
           display: 'grid',
           gridTemplateColumns: '140px 1fr',
+          flexGrow: 2,
           gridGap: 20,
+
+          minHeight: 270,
           border: `1px solid ${colors.gray20}`,
           // color: colors.text,
           padding: '1.25em',
@@ -68,7 +69,28 @@ function BookRow({book}) {
             alt={`${title} book cover`}
             css={{maxHeight: '100%', width: '100%', borderRadius: '4px'}}
           />
+
+          <div
+            css={{
+              marginTop: 10,
+              [mq.small]: {
+                marginTop: '30px',
+              },
+            }}
+          >
+            <div
+              css={{
+                // marginTop: '0.4em',
+                fontStyle: 'italic',
+                fontSize: '0.85em',
+              }}
+            >
+              {author}
+            </div>
+            <small>{book.publisher}</small>
+          </div>
         </div>
+
         <div css={{flex: 1}}>
           <div css={{display: 'flex', justifyContent: 'space-between'}}>
             <div css={{flex: 1}}>
@@ -84,7 +106,8 @@ function BookRow({book}) {
               </h2>
               {listItem?.finishDate ? <Rating listItem={listItem} /> : null}
             </div>
-            <div css={{marginLeft: 10}}>
+
+            {/* <div css={{marginLeft: 10}}>
               <div
                 css={{
                   marginTop: '0.4em',
@@ -95,13 +118,15 @@ function BookRow({book}) {
                 {author}
               </div>
               <small>{book.publisher}</small>
-            </div>
+            </div> */}
           </div>
+
           <small css={{whiteSpace: 'break-spaces', display: 'block'}}>
             {book.synopsis.substring(0, 500)}...
           </small>
         </div>
       </Link>
+
       <div
         css={{
           marginLeft: '20px',
