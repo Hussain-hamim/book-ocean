@@ -39,10 +39,11 @@ function AuthenticatedApp() {
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
       <div
         css={{
+          color: darkMode.darkMode ? 'white' : 'black',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          marginTop: '10px',
+          paddingTop: '10px',
           [mq.small]: {
             justifyContent: 'start',
             marginLeft: '15px',
