@@ -13,7 +13,7 @@ import {DiscoverBooksScreen} from './screens/discover'
 import {BookScreen} from './screens/book'
 import {NotFoundScreen} from './screens/not-found'
 import React from 'react'
-import {FaMoon, FaSun} from 'react-icons/fa'
+import {FaMoon, FaSun, FaUnderline} from 'react-icons/fa'
 import {DarkModeContext} from 'index.exercise'
 // import {DarkModeContext} from 'index.exercise'
 
@@ -37,6 +37,16 @@ function AuthenticatedApp() {
   const [darkMode, setDarkMode] = React.useContext(DarkModeContext)
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
+      <div
+        css={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '10px',
+        }}
+      >
+        <h3>Book Ocean</h3>
+      </div>
       <div
         css={{
           display: 'flex',
