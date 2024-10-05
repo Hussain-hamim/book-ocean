@@ -40,10 +40,11 @@ function BookRow({book}) {
           flexGrow: 2,
           gridGap: 20,
 
+          padding: '1.25em',
+
           minHeight: 270,
           border: `1px solid ${colors.gray20}`,
           // color: colors.text,
-          padding: '1.25em',
           borderRadius: '3px',
           backgroundColor: darkMode.darkMode ? '#212529' : 'white',
           color: darkMode.darkMode ? 'white' : '#212529',

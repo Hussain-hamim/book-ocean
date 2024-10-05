@@ -2,6 +2,8 @@
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
+import * as mq from 'styles/media-queries'
+
 import Tooltip from '@reach/tooltip'
 import {FaSearch, FaTimes} from 'react-icons/fa'
 import * as colors from 'styles/colors'
@@ -37,7 +39,13 @@ function DiscoverBooksScreen() {
         // width: '100%',
       }}
     >
-      <div>
+      <div
+        css={{
+          [mq.small]: {
+            paddingRight: '10px',
+          },
+        }}
+      >
         <form onSubmit={handleSearchClick}>
           <Input
             placeholder="Search books..."
@@ -75,9 +83,20 @@ function DiscoverBooksScreen() {
           </div>
         ) : null}
       </div>
+
       <div>
         {queried ? null : (
-          <div css={{marginTop: 20, fontSize: '1.2em', textAlign: 'center'}}>
+          <div
+            css={{
+              [mq.small]: {
+                paddingRight: '10px',
+              },
+
+              marginTop: 20,
+              fontSize: '1.2em',
+              textAlign: 'center',
+            }}
+          >
             <p>Welcome to the discover page.</p>
             <p>Here, let me load a few books for you...</p>
             {isLoading ? (
@@ -98,7 +117,7 @@ function DiscoverBooksScreen() {
             id="Discover Books Screen Book List"
             metadata={{query, bookCount: books.length}}
           >
-            <BookListUL css={{marginTop: 20}}>
+            <BookListUL css={{marginTop: 20, paddingLeft: '5px'}}>
               {books.map(book => (
                 <li key={book.id} aria-label={book.title}>
                   <BookRow key={book.id} book={book} />

@@ -110,7 +110,7 @@ function AuthenticatedApp() {
           backgroundColor: darkMode.darkMode ? '#212529' : 'white',
           margin: '0 auto',
 
-          padding: '4em 2em',
+          padding: '4em 0em',
           maxWidth: '840px',
 
           width: '100%',
@@ -128,7 +128,14 @@ function AuthenticatedApp() {
           },
         }}
       >
-        <div css={{position: 'relative'}}>
+        <div
+          css={{
+            position: 'relative',
+            [mq.small]: {
+              paddingRight: '10px',
+            },
+          }}
+        >
           <Nav />
         </div>
         <main
