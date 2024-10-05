@@ -47,7 +47,7 @@ function BookRow({book}) {
           // color: colors.text,
           borderRadius: '3px',
           backgroundColor: darkMode.darkMode ? '#212529' : 'white',
-          color: darkMode.darkMode ? 'white' : '#212529',
+          color: darkMode.darkMode ? 'white' : colors.text,
 
           ':hover,:focus': {
             textDecoration: 'none',
@@ -100,7 +100,10 @@ function BookRow({book}) {
                 css={{
                   fontSize: '1.25em',
                   margin: '0',
-                  color: colors.indigo,
+                  color: darkMode.darkMode ? 'white' : colors.indigo,
+                  ':hover,:focus': {
+                    color: colors.indigo,
+                  },
                 }}
               >
                 {title}
