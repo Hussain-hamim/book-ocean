@@ -50,7 +50,18 @@ function AuthenticatedApp() {
           },
         }}
       >
-        <h3>Book Ocean</h3>
+        <h3>
+          <u
+            css={{
+              ':hover': {
+                // color: colors.indigo,
+                textDecoration: 'none',
+              },
+            }}
+          >
+            Book Ocean
+          </u>
+        </h3>
       </div>
       <div
         css={{
@@ -98,8 +109,10 @@ function AuthenticatedApp() {
         css={{
           backgroundColor: darkMode.darkMode ? '#212529' : 'white',
           margin: '0 auto',
+
           padding: '4em 2em',
           maxWidth: '840px',
+
           width: '100%',
           display: 'grid',
           gridGap: '1em',
@@ -108,6 +121,10 @@ function AuthenticatedApp() {
             gridTemplateColumns: '1fr',
             gridTemplateRows: 'auto',
             width: '100%',
+
+            paddingTop: '30px',
+            paddingLeft: '20px',
+            maxWidth: '100%',
           },
         }}
       >
