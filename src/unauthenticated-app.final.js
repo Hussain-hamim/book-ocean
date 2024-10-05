@@ -73,7 +73,7 @@ function UnauthenticatedApp() {
       }}
     >
       <Logo width="80" height="80" />
-      <h1>Bookshelf</h1>
+      <h1>book ocean</h1>
       <div
         css={{
           display: 'grid',
