@@ -50,6 +50,7 @@ function LoginForm({onSubmit, submitButton}) {
         {React.cloneElement(
           submitButton,
           {type: 'submit'},
+          //todo: explain this by gpt
           ...(Array.isArray(submitButton.props.children)
             ? submitButton.props.children
             : [submitButton.props.children]),
