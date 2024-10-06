@@ -35,6 +35,7 @@ function ErrorFallback({error}) {
 function AuthenticatedApp() {
   const {user, logout} = useAuth()
   const [darkMode, setDarkMode] = React.useContext(DarkModeContext)
+
   return (
     <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
       <div
