@@ -3,7 +3,9 @@ import {setQueryDataForBook} from './books'
 import {useClient} from 'context/auth-context'
 
 // this below module should be explain
-// and well learn and document by copilot
+// and well learn and document by copilot:
+
+// this retrieve a single list item by bookId, find one with specific id
 function useListItem(bookId, options) {
   const listItems = useListItems(options)
   return listItems?.find(li => li.bookId === bookId) ?? null
@@ -35,6 +37,8 @@ const defaultMutationOptions = {
   onSettled: () => queryCache.invalidateQueries('list-items'),
 }
 
+// this handle optimistic update for list items
+// update cache with new item data
 function onUpdateMutation(newItem) {
   const previousItems = queryCache.getQueryData('list-items')
 
@@ -44,6 +48,7 @@ function onUpdateMutation(newItem) {
     })
   })
 
+  // rollback fn to restore in case of an error
   return () => queryCache.setQueryData('list-items', previousItems)
 }
 
