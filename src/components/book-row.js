@@ -17,6 +17,8 @@ function BookRow({book}) {
   const listItem = useListItem(book.id)
   const [darkMode] = React.useContext(DarkModeContext)
 
+  console.log(listItem)
+
   const id = `book-row-book-${book.id}`
 
   return (
