@@ -2,6 +2,8 @@ import {useQuery, useMutation, queryCache} from 'react-query'
 import {setQueryDataForBook} from './books'
 import {useClient} from 'context/auth-context'
 
+// this below module should be explain
+// and well learn and document by copilot
 function useListItem(bookId, options) {
   const listItems = useListItems(options)
   return listItems?.find(li => li.bookId === bookId) ?? null
