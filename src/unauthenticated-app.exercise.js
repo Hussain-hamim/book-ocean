@@ -116,12 +116,9 @@ function UnauthenticatedApp() {
         <button
           onClick={mode => setDarkMode({darkMode: !darkMode.darkMode})}
           css={{
-            // marginRight: '10px',
-            // marginLeft: '10px',
             border: 'none',
             borderRadius: '10px',
             paddingBottom: '5px',
-            // width: '50px',
             backgroundColor: 'gray',
             position: 'absolute',
             top: '20px',
@@ -134,7 +131,6 @@ function UnauthenticatedApp() {
         </button>
         <div
           css={{
-            // paddingRight: '5px',
             color: darkMode.darkMode ? 'white' : 'black',
             position: 'absolute',
             right: '20px',
@@ -153,9 +149,4 @@ function UnauthenticatedApp() {
   )
 }
 
-// 🐨 change this to a default export
 export default UnauthenticatedApp
-
-// 🐨 Unfortunately, to make this work for our workshop,
-// you need to add this to src/unauthenticated-app.js:
-// export {default} from './unauthenticated-app.exercise'
