@@ -18,6 +18,8 @@ import {StatusButtons} from 'components/status-buttons'
 // import {DarkModeContext} from 'app.exercise'
 import {DarkModeContext} from 'index.exercise'
 
+//// reviewing bookScreen
+
 function BookScreen() {
   const {bookId} = useParams()
   const book = useBook(bookId)
@@ -57,6 +59,7 @@ function BookScreen() {
                   <i>{publisher}</i>
                 </div>
               </div>
+
               <div
                 css={{
                   right: 0,
@@ -70,16 +73,19 @@ function BookScreen() {
                 {book.loadingBook ? null : <StatusButtons book={book} />}
               </div>
             </div>
+
             <div css={{marginTop: 10, minHeight: 46}}>
               {listItem?.finishDate ? <Rating listItem={listItem} /> : null}
               {listItem ? <ListItemTimeframe listItem={listItem} /> : null}
             </div>
+
             <br />
             <p css={{whiteSpace: 'break-spaces', display: 'block'}}>
               {synopsis}
             </p>
           </div>
         </div>
+
         {!book.loadingBook && listItem ? (
           <NotesTextarea listItem={listItem} />
         ) : null}
