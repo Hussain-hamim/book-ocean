@@ -2,6 +2,12 @@ import {useQuery, useMutation, queryCache} from 'react-query'
 import {setQueryDataForBook} from './books'
 import {useClient} from 'context/auth-context'
 
+// lingo, layman, hone on, divvy up task, communication skill
+// analogy,
+
+// people's behavior affects what we built,
+// also technology influences people's behavior.
+
 // this below module should be explain
 // and well learn and document by copilot:
 
