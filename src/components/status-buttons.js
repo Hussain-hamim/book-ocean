@@ -30,7 +30,7 @@ function TooltipButton({label, highlight, onClick, icon, ...rest}) {
       run(onClick())
     }
   }
-
+  // review the tooltip btn comp
   return (
     <Tooltip label={isError ? error.message : label}>
       <CircleButton
