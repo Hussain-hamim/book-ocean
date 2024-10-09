@@ -15,10 +15,7 @@ import {Spinner, Textarea, ErrorMessage} from 'components/lib'
 import {Rating} from 'components/rating'
 import {Profiler} from 'components/profiler'
 import {StatusButtons} from 'components/status-buttons'
-// import {DarkModeContext} from 'app.exercise'
 import {DarkModeContext} from 'index.exercise'
-
-//// reviewing bookScreen
 
 function BookScreen() {
   const {bookId} = useParams()
