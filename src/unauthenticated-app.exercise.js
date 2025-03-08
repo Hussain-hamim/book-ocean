@@ -143,7 +143,7 @@ function UnauthenticatedApp() {
               paddingRight: '5px',
             }}
           />
-          Hussain-hamim 2024
+          hsn 2024
         </div>
       </div>
     </div>
